@@ -1,0 +1,43 @@
+$_breakpoints: (
+    // Use private convention
+    sm: 640px,
+    md: 768px,
+    lg: 1024px
+);
+
+// Public accessor
+@function breakpoints($key) {
+    @return map-get($_breakpoints, $key);
+}
+
+$spacing-unit: 0.25rem;
+// Breakpoints
+$sm: 640px;
+$md: 768px;
+$lg: 1024px;
+
+$color-black: (
+    100: #1a1a1a,
+    200: #262626,
+    300: #404040
+);
+
+$colors: (
+    black-100: #0a0a0a,
+    white: #ffffff,
+    blue-100: #e4ecff
+);
+
+// Colors
+$neutral-50: #fafafa;
+$neutral-300: #d4d4d4;
+$neutral-500: #737373;
+$neutral-600: #525252;
+
+@function black($level) {
+    @return map-get($color-black, $level);
+}
+
+$black-100: #1a1a1a; // Replace with actual color value
+
+$max-w-7xl: 1280px; // 80rem; // 1280px

@@ -1,0 +1,26 @@
+@mixin flex-container($direction: column, $justify: center, $align: center) {
+    display: flex;
+    flex-direction: $direction;
+    justify-content: $justify;
+    align-items: $align;
+}
+
+@mixin responsive($breakpoint) {
+    @media (min-width: map-get($_breakpoints, $breakpoint)) {
+        @content;
+    }
+}
+
+@mixin absolute-position($top: null, $left: null, $right: null, $bottom: null) {
+    position: absolute;
+    top: $top;
+    left: $left;
+    right: $right;
+    bottom: $bottom;
+}
+
+@mixin flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

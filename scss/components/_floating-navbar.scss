@@ -1,0 +1,77 @@
+// FloatingNavbar.module.scss
+@import './../base/variables'; // Your variables file
+
+.floating-nav {
+    display: flex;
+    max-width: fit-content;
+    position: fixed;
+    top: 2.5rem; // 40px
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    padding: 1.25rem 2.5rem; // px-10 py-5
+    border-radius: 0.5rem; // rounded-lg
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 2px 3px -1px rgba(0, 0, 0, 0.1),
+        0px 1px 0px 0px rgba(25, 28, 33, 0.02),
+        0px 0px 0px 1px rgba(25, 28, 33, 0.08);
+    gap: 1rem; // space-x-4
+    align-items: center;
+    justify-content: center;
+    z-index: 5000;
+
+    @media (min-width: $md) {
+        min-width: 70vw;
+    }
+
+    @media (min-width: $lg) {
+        min-width: fit-content;
+    }
+}
+
+.navLink {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem; // space-x-1
+    color: $neutral-600;
+    transition: color 0.2s ease;
+
+    &:hover {
+        color: $neutral-500;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        color: $neutral-50;
+
+        &:hover {
+            color: $neutral-300;
+        }
+    }
+}
+
+.mobileIcon {
+    display: block;
+    
+    // display: flex;
+    // align-items: center;
+
+    // @media (min-width: $sm) {
+    //     display: none;
+    // }
+
+        .iconImage{
+            width: 3rem;
+                height: 3rem;
+                //object-fit: cover;
+
+            
+                @media (prefers-color-scheme: dark) {
+                    filter: brightness(0) invert(1);
+                }
+        }
+}
+
+.navText {
+    font-size: 0.875rem; // text-sm
+    cursor: pointer;
+}

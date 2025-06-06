@@ -1,0 +1,30 @@
+// components/Spotlight/Spotlight.module.scss
+
+@import "./../base/variables"; // Import your variables
+
+.animate-spotlight {
+    animation: spotlight 2s ease 0.75s 1 forwards; // spotlight animation
+    pointer-events: none; // pointer-events-none
+    position: absolute; // absolute
+    z-index: 1; // z-[1]
+    height: 169%; // h-[169%]
+    width: 138%; // w-[138%]
+    opacity: 0; // opacity-0
+
+    @media (min-width: 1024px) {
+        // lg: breakpoint
+        width: 84%; // lg:w-[84%]
+    }
+}
+
+// Define the spotlight animation
+@keyframes spotlight {
+    0% {
+        opacity: 0;
+        transform: translate(-72%, -62%) scale(0.5); // Initial state
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -40%) scale(1); // Final state
+    }
+}

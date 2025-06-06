@@ -1,0 +1,110 @@
+@import "./../base/variables";
+@import "./../base/mixins";
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100vw;
+  min-height: 100vh;
+  z-index: 1;
+}
+
+.Port-left,
+.Port-right {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.Coder-left,
+.Design-right {
+  position: relative;
+  z-index: 2; // Above images
+  background: transparent;
+  cursor: pointer;
+  transition:
+    transform 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0s,
+    visibility 0s;
+  padding: 1rem;
+  width: 28vw;
+}
+
+.Coder-left h1,
+.Coder-left p,
+.Design-right h1,
+.Design-right p {
+  transition:
+    opacity 0s,
+    visibility 0s;
+}
+
+.Port-left {
+  padding-right: 16rem;
+  padding-left: 2rem;
+}
+
+.Port-right {
+  padding-left: 16rem;
+  padding-right: 2rem;
+}
+
+.Coder-left h1,
+.Design-right h1 {
+  font-size: 5vw;
+}
+
+.Coder-left p,
+.Design-right p {
+  font-size: 3.4vh;
+}
+
+.image-wrapper-l,
+.image-wrapper-r {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  min-height: 100vh;
+  scale: 0.8;
+  transition:
+    transform 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0s,
+    visibility 0s;
+  z-index: 1;
+  pointer-events: none; // Prevent images from blocking hover
+}
+
+.image-wrapper-l {
+  visibility: visible;
+  opacity: 1;
+  transform: none;
+}
+
+.image-wrapper-r {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  min-height: 100vh;
+  scale: 0.4;
+  transition:
+    transform 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0s,
+    visibility 0s;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transform: none;
+  left: -52vw;
+}
+
+// .image-wrapper-r {
+//   visibility: hideen;
+//   opacity: 0;
+// }
