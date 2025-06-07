@@ -20,7 +20,7 @@
 # Imports
 --------------------------------------------------------------*/
 /* Custom Components */
- /* @use  */
+/* @use  */
 @use "layouts";
 
 @use "base";
@@ -29,9 +29,9 @@
 
 @use "pages";
 
-@import './base/mixins';
+@import "./base/mixins";
 
-@import './base/variables';
+@import "./base/variables";
 
 //@use 'variables';
 
@@ -47,10 +47,10 @@
 // {
 // 	scroll-behavior: smooth;
 //     margin: 0px; padding: 0px;
-	
+
 // }
 
-// body 
+// body
 // {
 // 	background-color:white;
 // 	//#CFB4C3
@@ -59,32 +59,56 @@
 // 	width: auto;
 // }
 
-
 .main-container {
 	position: relative;
-	background-color: black(100);
-	@include flex-container;
+	background-color: #01031a; // #18181b; // black(100)
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 	overflow: hidden;
 	margin: 0 auto;
-	padding: 1.25rem; // px-5 (5 * 0.25rem = 1.25rem)
+	padding: 1.25rem;
 	width: 100%;
-	//min-width: 320px;
-	//background: rgba(0, 255, 0, 0.1);
 
-	@include responsive('sm') {
-		padding-left: 2.5rem; // sm:px-10 (10 * 0.25rem = 2.5rem)
+	@media (min-width: 640px) {
+		padding-left: 2.5rem;
 		padding-right: 2.5rem;
 	}
 
 	.inner-container {
-		width: 100%;
-		max-width: $max-w-7xl;
-
-			//outline: 1px solid red;
-			//border: solid black 2px;
+		max-width: 80rem;
+		width: 100vw;
+		// max-width: 1280px;
+		margin-left: 0;
+		margin-right: 0;
 	}
 }
 
+// .main-container {
+// 	position: relative;
+// 	background-color: black(100);
+// 	@include flex-container;
+// 	overflow: hidden;
+// 	margin: 0 auto;
+// 	padding: 1.25rem; // px-5 (5 * 0.25rem = 1.25rem)
+// 	width: 100%;
+// 	//min-width: 320px;
+// 	//background: rgba(0, 255, 0, 0.1);
+
+// 	@include responsive('sm') {
+// 		padding-left: 2.5rem; // sm:px-10 (10 * 0.25rem = 2.5rem)
+// 		padding-right: 2.5rem;
+// 	}
+
+// 	.inner-container {
+// 		width: 100%;
+// 		max-width: $max-w-7xl;
+
+// 			//outline: 1px solid red;
+// 			//border: solid black 2px;
+// 	}
+// }
+// --------------------------------------------------
 
 // _base.scss
 // *,
@@ -101,11 +125,11 @@
 // 	margin: 0;
 // 	padding: 0;
 //   }
- 
+
 // .nav-link {
 // 	/* @include nav-item; */
 // }
-  /* .nav-item.highlighted { // Override hover color for a specific item
+/* .nav-item.highlighted { // Override hover color for a specific item
 	@include nav-item($hover-color: red);
   }
   
@@ -119,4 +143,3 @@
     @include 
      
 } */
-

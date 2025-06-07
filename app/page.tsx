@@ -27,6 +27,7 @@ const Home = () => {
         <FloatingNav navItems={navItems} />
         <Logo />
         <Hero />
+        <Portfolio />
         {/* logo is visible when disabling Hero  */}
         <Grid />
         <RecentProjects />

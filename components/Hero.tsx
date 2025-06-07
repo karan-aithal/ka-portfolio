@@ -112,13 +112,14 @@ const Hero = () => {
        */}
       <div className="hero__grid-container">
         {/* Radial gradient for the container to give a faded look */}
-
         <div
           // chnage the bg to bg-black-100, so it matches the bg color and will blend in
           className="hero__gradient-overlay"
         />
       </div>
-      <Portfolio></Portfolio>
+
+      <div className="hero__grid-container tron"></div>
+      {/* //add portfolio her if wanted */}
     </div>
   );
 };

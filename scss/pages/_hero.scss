@@ -2,151 +2,96 @@
 @import "./../base/mixins";
 
 .hero {
-    padding: 9rem 0 5rem; // pt-36(9rem) pb-20(5rem)
+    padding-bottom: 5rem; // pb-20
+    padding-top: 9rem; // pt-36
+    //position: relative;
+    // margin-bottom: 0; // Remove if you don't want extra space
+    width: 100%;
 
-    // &__spotlight-container {
-    //     @include absolute-position(0, 0);
-    //     position: relative;
-    // }
-
-    &__grid-container {
-        height: 100vh; // h-screen
-        width: 200%; // w-full
-        background-color: transparent; // bg-white
-        outline: solid black 2px;
-        @include absolute-position(0, 0);
-        @include flex-center;
-
-        // position: relative; // absolute
-        top: 0; // top-0
-        //left: 0; // left-0
-        // bottom: 0;
-        left: -50%;
-
-        // Dark mode styles
-        &.dark {
-            background-color: black; // dark:bg-black-100
-            background-image: radial-gradient(circle, transparent 20%, white); // dark:bg-grid-white/[0.03]
-        }
-
-        // Light mode grid background
-        background-image:
-            linear-gradient(to right, rgba(0, 0, 0, 0.2) 1.5px, transparent 1.5px),
-            // Vertical lines
-            linear-gradient(to bottom, rgba(0, 0, 0, 0.2) 1.5px, transparent 1.5px); // Horizontal lines
-
-        background-size: 70px 70px; // Adjust grid size
-        background-position: 0 0;
-        transform-origin: bottom;
-        //padding: 1px;
-        overflow: hidden;
-
-        // Tron style grid
-        transform: perspective(400px) rotateX(40deg) scale(2, 1) translateZ(0);
-
-        // TRY Different grids below
-        //background-image: radial-gradient(ellipse at center, transparent 20%, rgba(0, 0, 0, 0.2) 20%, transparent 80%);
-        // background-image: radial-gradient(ellipse at center, transparent 69%, black 69%, black 71%, transparent 71%);
-        // background-image: radial-gradient(circle, transparent 20%, rgba(0, 0, 0, 0.2)); // bg-grid-black-100/[0.2]
-        // background-image: radial-gradient(circle, transparent 20%, rgba(0, 0, 0, 0.2));
-    }
-
-    &__gradient-overlay {
-        @include absolute-position(0, 0);
-        @include flex-center;
-        height: 100vh; // h-screen
-        width: 100%; // w-full
-        //background-color: map-get($colors, white);
-
+    &__spotlight-container {
+        position: absolute;
         top: 0;
         left: 0;
-        mask-size: 70px 70px; // Adjust grid size
-        background-position: 0 0;
-        // transform: perspective(200px) rotateX(40deg) scale(2, 1) translateZ(0);
-
-        // width: 100%; // Ensure full width
-        // height: 100%; // Ensure full height
-        // inset: 0;
-
-        // Radial gradient mask
-        background-color: black; // Fallback background color
-        // mask-image: radial-gradient(ellipse at center, transparent 20%, black 100%);
-        mask-image: radial-gradient(ellipse at center, transparent 20%, rgba(0, 0, 0, 0.05));
-        // -webkit-mask-image: radial-gradient(ellipse at center, transparent 20%, black 100%);
+        width: 100vw;
+        height: 100vh;
+        pointer-events: none;
+        z-index: 0;
     }
 
-    &__content {
-        @include flex-center;
-        width: 100%;
-        height: 60vh;
-
-        width: 40%;
-        display: block;
-        z-index: 10;
-        height: 20%;
-        margin: auto;
+    // Hero grid container - First div
+    &__grid-container {
+        height: 100vh;
+        width: 100vw;
+        position: absolute;
         top: 0;
+        left: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        // Light mode styles
+        background-color: white;
+        background-image: linear-gradient(to right, rgba(0, 0, 0, 0.25) 1.5px, transparent 1.5px),
+            linear-gradient(to bottom, rgba(0, 0, 0, 0.25) 1.5px, transparent 1.5px);
+        background-size: 80px 80px;
+        opacity: 1;
+
+        // Dark mode styles -- default
+        @media (prefers-color-scheme: dark) {
+            background-color: #0a0a0a;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.05) 1.5px, transparent 1.5px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1.5px, transparent 1.5px);
+            background-size: 80px 80px;
+        }
+
+        // Tron style grid (neon cyan lines on dark bg)
+        &.tron {
+            background-color: #0a0f1c;
+            background-image: linear-gradient(to right, rgba(0, 255, 255, 0.35) 2px, transparent 2px),
+                linear-gradient(to bottom, rgba(0, 255, 255, 0.35) 2px, transparent 2px);
+            box-shadow: 0 0 40px 2px #00fff7 inset;
+
+            transform-origin: bottom;
+            transform: perspective(400px) rotateX(40deg) scale(2, 1) translateZ(0);
+        }
+
+        // Optional: Tron grid in dark mode only
+        .dark &.tron,
+        [data-theme="dark"] &.tron {
+            background-color: #0a0f1c;
+            background-image: linear-gradient(to right, rgba(0, 255, 255, 0.45) 1.5px, transparent 1.5px),
+                linear-gradient(to bottom, rgba(0, 255, 255, 0.25) 2px, transparent 2px);
+            box-shadow: 0 0 40px 2px #00fff7 inset;
+            background-size: 60px 45px;
+
+            transform-origin: bottom;
+            transform: perspective(500px) rotateX(45deg) scale(2, 1) translateZ(0);
+        }
+        //Perspective and transform for 3D effect
+        //transform-origin: bottom;
+        //transform: perspective(400px) rotateX(40deg) scale(2, 1) translateZ(0);
+    }
+    // Div 2
+    &__gradient-overlay {
+        position: absolute;
+        pointer-events: none;
+        top: 0;
+        right: 0;
         bottom: 0;
-        // margin-top: 5rem; // my-20 (20 * 0.25 = 5rem)
-        // margin-bottom: 5rem; // my-20 (20 * 0.25 = 5rem)
-        z-index: 10; // z-10
-    }
+        left: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
-    &__maxwidthcontainer {
-        //max-width: 89vw;
-        // @include flex-center;
-        //flex-direction: row;
+        // Mask image for radial gradient effect
+        // Light mode
+        background: radial-gradient(ellipse at center, transparent 60%, #0a0a0a 100%);
+        // -webkit-mask-image: radial-gradient(ellipse at center, transparent 20%, black 100%);
 
-        // @media (min-width: 768px) {
-        //     max-width: 42rem; // md:max-w-2xl
-        // }
-
-        // @media (min-width: 1024px) {
-        //     max-width: 60vw; // lg:max-w-[60vw]
-        // }
-    }
-
-    //uppercase tracking-widest text-xs text-center text-blue-100 max-w-80
-    &__subheading {
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-        font-size: 0.75rem;
-        text-align: center;
-        color: map-get($colors, blue-100);
-        max-width: 20rem;
-    }
-
-    &__cta-button {
-        margin-top: 1rem;
-    }
-    //text-center text-[40px] md:text-5xl lg:text-6xl
-    &__textgenerate {
-        text-align: center;
-        font-size: 40px;
-        z-index: 10;
-
-        @media (min-width: 768px) {
-            font-size: 3rem; // md:text-5xl
-        }
-
-        @media (min-width: 1024px) {
-            font-size: 3.75rem; // lg:text-6xl
-        }
-    }
-
-    //text-center md:tracking-wider mb-4 text-sm md:text-lg lg:text-2xl
-    &__description-text {
-        text-align: center;
-        margin-bottom: 1rem;
-        font-size: 0.875rem;
-
-        @media (min-width: 768px) {
-            letter-spacing: 0.05em;
-            font-size: 1.125rem; // md:text-lg
-        }
-
-        @media (min-width: 1024px) {
-            font-size: 1.5rem; // lg:text-2xl
+        // Dark mode  -- default
+        @media (prefers-color-scheme: dark) {
+            background: radial-gradient(ellipse at center, transparent 40%, rgba(1, 3, 26, 1) 100%);
+            // -webkit-mask-image: radial-gradient(ellipse at center, transparent 20%, black 100%);
         }
     }
 }
@@ -187,3 +132,81 @@
         width: 50vw; // w-[50vw]
     }
 }
+
+// ADDITIONAL RESOURCES FOR FUTURE REFERENCE
+// ------------------------------
+
+// // &__content {
+//     @include flex-center;
+//     width: 100%;
+//     min-height: 60vh;
+//     position: relative;
+//     z-index: 10;
+//     margin: 5rem auto;
+// }
+//         // Tron style grid
+// Tron style grid (neon cyan lines on dark bg)
+//     &.tron {
+//         background-color: #0a0f1c;
+//         background-image: linear-gradient(to right, rgba(0, 255, 255, 0.25) 1.5px, transparent 1.5px),
+//             linear-gradient(to bottom, rgba(0, 255, 255, 0.25) 1.5px, transparent 1.5px);
+//         box-shadow: 0 0 40px 2px #00fff7 inset;
+//     }
+
+//     // Optional: Tron grid in dark mode only
+//     .dark &.tron,
+//     [data-theme="dark"] &.tron {
+//         background-color: #0a0f1c;
+//         background-image: linear-gradient(to right, rgba(0, 255, 255, 0.25) 1.5px, transparent 1.5px),
+//             linear-gradient(to bottom, rgba(0, 255, 255, 0.25) 1.5px, transparent 1.5px);
+//         box-shadow: 0 0 40px 2px #00fff7 inset;
+//     }
+
+//     // Perspective and transform for 3D effect
+//     transform-origin: bottom;
+//     transform: perspective(400px) rotateX(40deg) scale(2, 1) translateZ(0);
+// }
+//         transform: perspective(400px) rotateX(40deg) scale(2, 1) translateZ(0);
+
+//         // TRY Different grids below
+//         //background-image: radial-gradient(ellipse at center, transparent 20%, rgba(0, 0, 0, 0.2) 20%, transparent 80%);
+//         // background-image: radial-gradient(ellipse at center, transparent 69%, black 69%, black 71%, transparent 71%);
+//         // background-image: radial-gradient(circle, transparent 20%, rgba(0, 0, 0, 0.2)); // bg-grid-black-100/[0.2]
+//         // background-image: radial-gradient(circle, transparent 20%, rgba(0, 0, 0, 0.2));
+//     }
+
+//     &__cta-button {
+//         margin-top: 1rem;
+//     }
+
+//     //text-center text-[40px] md:text-5xl lg:text-6xl
+//     &__textgenerate {
+//         text-align: center;
+//         font-size: 40px;
+//         z-index: 10;
+
+//         @media (min-width: 768px) {
+//             font-size: 3rem; // md:text-5xl
+//         }
+
+//         @media (min-width: 1024px) {
+//             font-size: 3.75rem; // lg:text-6xl
+//         }
+//     }
+
+//     //text-center md:tracking-wider mb-4 text-sm md:text-lg lg:text-2xl
+//     &__description-text {
+//         text-align: center;
+//         margin-bottom: 1rem;
+//         font-size: 0.875rem;
+
+//         @media (min-width: 768px) {
+//             letter-spacing: 0.05em;
+//             font-size: 1.125rem; // md:text-lg
+//         }
+
+//         @media (min-width: 1024px) {
+//             font-size: 1.5rem; // lg:text-2xl
+//         }
+//     }
+// }
