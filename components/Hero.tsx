@@ -125,33 +125,3 @@ const Hero = () => {
 };
 
 export default Hero;
-
-{
-  /* <div className="hero__maxwidthcontainer">
-          <p className="hero__subheading ">Dynamic Web Magic with Next.js</p>
-
-          {/**
-           *  Link: https://ui.aceternity.com/components/text-generate-effect
-           *
-           *  change md:text-6xl, add more responsive code
-           */
-}
-{
-  /* <TextGenerateEffect
-            words="Transforming Concepts into Seamless User Experiences"
-            className="hero__textgenerate"
-          />
-
-          <p className="hero__description-text ">
-            Hi! I&apos;m Karan, a Next.js Developer based in India.
-          </p>
-
-          <a href="#about">
-            <MagicButton
-              title="Show my work"
-              icon={<FaLocationArrow />}
-              position="right"
-            />
-          </a>
-        </div> */
-}

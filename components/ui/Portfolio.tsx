@@ -4,8 +4,8 @@ import { useEffect } from "react";
 import { motion } from "framer-motion";
 import gsap from "gsap";
 
-import potraitL from "../../public/Karan 1_LE_upscale_magic_x4_strength_75_similarity_100.png";
-import potraitR from "../../public/DSC04980Transp.png";
+import potraitL from "../../public/OG fake kush.png";
+import potraitR from "../../public/OG Hyper fake kush.png";
 
 import Image from "next/image";
 
@@ -117,9 +117,20 @@ const Portfolio = () => {
     const handleMouseLeave = () => {
       gsap.killTweensOf([rightText, rightImage, leftText, leftImage]);
       // Reset both sides instantly
-      gsap.set([leftText, rightText], { scale: 1, autoAlpha: 1 });
-      gsap.set(leftImage, { x: 0, autoAlpha: 1 });
-      gsap.set(rightImage, { x: 0, autoAlpha: 0 });
+      gsap.set([leftText, rightText], { scale: 1 });
+      // Animate leftImage back to x: 0, then hide it
+      gsap.to(leftImage, {
+        x: 0,
+        duration: 0.4,
+        ease: "cubic-bezier(0.4, 0, 0.2, 1)",
+        // fade out while moving
+
+        onComplete: () => {
+          gsap.set(leftImage, { x: 0, autoAlpha: 0 });
+          gsap.set(rightImage, { x: 0, autoAlpha: 1 });
+          gsap.to([leftText, rightText], { autoAlpha: 1, duration: 0.8 });
+        },
+      });
       window.removeEventListener("mousemove", handleMouseMove);
     };
     if (leftText && rightText) {
@@ -156,8 +167,51 @@ const Portfolio = () => {
         <a href="mailto:danielgraziotti99@gmail.com" className="email-btn">📧 danielgraziotti99@gmail.com</a>
       </section> */}
 
-        {/* Left Side (Coder) */}
+        <div className="image-wrapper-l">
+          <Image
+            src={potraitL}
+            alt="portrait"
+            fill
+            style={{ objectFit: "cover", objectPosition: "center" }}
+            priority
+          />
+        </div>
+        <div className="image-wrapper-r">
+          <Image
+            src={potraitR}
+            alt="portrait"
+            fill
+            style={{ objectFit: "cover", objectPosition: "center" }}
+            priority
+          />
+        </div>
+
         <div className="Port-left">
+          <div className="Coder-left">
+            <motion.h1
+              initial={{ y: 50, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 1 }}
+            >
+              <span className={`${arrayWide.className}`}>{"<CODER>"}</span>
+            </motion.h1>
+            <p className={`${anonymousPro.className}`}>
+              Passionate coder, solving one micro problem at a time
+            </p>
+          </div>
+        </div>
+        <div className="Port-right">
+          <div className="Design-right">
+            <h1 className={`${misto.className}`}>Designer</h1>
+            <p className={`${anonymousPro.className}`}>
+              Designer, specialising in creativity, UI and Design systems
+            </p>
+          </div>
+        </div>
+
+        {/* Left Side (Coder) */}
+
+        {/* <div className="Port-left">
           <div className="Coder-left">
             <motion.h1
               initial={{ y: 50, opacity: 0 }}
@@ -174,14 +228,16 @@ const Portfolio = () => {
             <Image
               src={potraitL}
               alt="portrait"
-              layout="fill"
-              objectFit="contain"
+              fill
+              style={{ objectFit: "cover", objectPosition: "center" }}
+              priority
             />
           </div>
-        </div>
+        </div> */}
 
         {/* Right Side (Designer) */}
-        <div className="Port-right">
+
+        {/* <div className="Port-right">
           <div className="Design-right">
             <h1 className={`${misto.className}`}>Designer</h1>
             <p className={`${anonymousPro.className}`}>
@@ -192,11 +248,12 @@ const Portfolio = () => {
             <Image
               src={potraitR}
               alt="portrait"
-              layout="fill"
-              objectFit="contain"
+              fill
+              style={{ objectFit: "cover", objectPosition: "center" }}
+              priority
             />
           </div>
-        </div>
+        </div> */}
 
         {/* Extra FOG  */}
         {/* <div className="fog-container">
