@@ -7,6 +7,7 @@ import {
   AnimatePresence,
   useScroll,
   useMotionValueEvent,
+  color,
 } from "framer-motion";
 
 const jhonCream = localFont({
@@ -69,7 +70,7 @@ const Logo = () => {
 
           <a href="/">
             {" "}
-            <span className={`CName ${jhonCream.className}`}> Kagunita</span>
+            <span className={`CName ${jhonCream.className }`}> Kagunita</span>
           </a>
         </div>
       </motion.div>

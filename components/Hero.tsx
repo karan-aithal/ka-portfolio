@@ -119,6 +119,7 @@ const Hero = () => {
       </div>
 
       <div className="hero__grid-container tron"></div>
+      {/* <Portfolio/> */}
       {/* //add portfolio her if wanted */}
     </div>
   );

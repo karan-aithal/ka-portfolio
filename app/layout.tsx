@@ -21,6 +21,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="icon" href="/jsm-logo.png" sizes="any" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
       </head>
       <body className={inter.className}>
         <ThemeProvider

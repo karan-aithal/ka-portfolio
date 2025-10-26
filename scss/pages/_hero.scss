@@ -2,8 +2,9 @@
 @import "./../base/mixins";
 
 .hero {
+    //--hero-overlap: clamp(100px, 18vh, 220px);
     padding-bottom: 5rem; // pb-20
-    padding-top: 9rem; // pt-36
+    padding-top: 5rem; // pt-36
     //position: relative;
     // margin-bottom: 0; // Remove if you don't want extra space
     width: 100%;
@@ -67,10 +68,12 @@
             transform-origin: bottom;
             transform: perspective(500px) rotateX(45deg) scale(2, 1) translateZ(0);
         }
+
         //Perspective and transform for 3D effect
         //transform-origin: bottom;
         //transform: perspective(400px) rotateX(40deg) scale(2, 1) translateZ(0);
     }
+
     // Div 2
     &__gradient-overlay {
         position: absolute;
@@ -99,6 +102,7 @@
 // Spotlight component specific styles (if not using UI framework)
 .spotlight {
     position: relative;
+
     &--primary {
         @include absolute-position(-10rem, -2.5rem);
         height: 100vh; // h-screen

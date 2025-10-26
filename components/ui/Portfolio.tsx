@@ -15,7 +15,7 @@ const misto = localFont({
   src: [
     {
       path: "../../public/fonts/Misto.otf",
-      weight: "400",
+      // weight: "400",
       style: "normal",
     },
   ],
@@ -45,7 +45,7 @@ const anonymousPro = localFont({
   src: [
     {
       path: "../../public/fonts/AnonymousPro-Regular.ttf",
-      weight: "400",
+      //weight: "400",
       style: "normal",
     },
   ],
@@ -55,7 +55,7 @@ const arrayWide = localFont({
   src: [
     {
       path: "../../public/fonts/Array-Wide.otf",
-      weight: "400",
+      //weight: "400",
       style: "normal",
     },
   ],
@@ -68,11 +68,21 @@ const Portfolio = () => {
     const leftImage = document.querySelector(".image-wrapper-l");
     const rightImage = document.querySelector(".image-wrapper-r");
 
-    const centerX = window.innerWidth / 2;
+    let centerX = window.innerWidth / 2;
+    let offset = window.innerWidth * 0.2; // 20% of screen width
+
+    const handleResize = () => {
+      centerX = window.innerWidth / 2;
+      offset = window.innerWidth * 0.2; // 20% of screen width
+    };
+
+    window.addEventListener("resize", handleResize);
+
 
     interface MouseMoveEvent extends MouseEvent {
       clientX: number;
     }
+
 
     const handleMouseMove = (e: MouseMoveEvent) => {
       const distance = Math.abs(e.clientX - centerX);
@@ -96,7 +106,7 @@ const Portfolio = () => {
       gsap.set(leftImage, { autoAlpha: 1 });
       // Animate left side in
       gsap.to(leftText, { scale: 1.2, duration: 0.3 });
-      gsap.to(leftImage, { x: 300, duration: 0.3 });
+      gsap.to(leftImage, { x: offset, duration: 0.3 });
       window.addEventListener("mousemove", handleMouseMove);
     };
 
@@ -110,7 +120,7 @@ const Portfolio = () => {
       gsap.set(rightImage, { autoAlpha: 1 });
       // Animate right side in
       gsap.to(rightText, { scale: 1.2, duration: 0.3 });
-      gsap.to(rightImage, { x: -300, duration: 0.3 });
+      gsap.to(rightImage, { x: -offset, duration: 0.3 });
       window.addEventListener("mousemove", handleMouseMove);
     };
 
@@ -148,6 +158,7 @@ const Portfolio = () => {
         rightText.removeEventListener("mouseleave", handleMouseLeave);
       }
       window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
 
@@ -157,17 +168,70 @@ const Portfolio = () => {
 
       <div className="container">
         {/* Extra FOG */}
-        <div className="fog-container">
+        {/* <div className="fog-container">
           <div className="fog-img fog-img-first"></div>
           <div className="fog-img fog-img-second"></div>
-        </div>
+        </div> */}
         {/* <section className="hero" data-scroll-section>
     
         <p className="subtitle">Full-Stack Developer</p>
         <a href="mailto:danielgraziotti99@gmail.com" className="email-btn">📧 danielgraziotti99@gmail.com</a>
       </section> */}
 
-        <div className="image-wrapper-l">
+
+        <div className="Port-left">
+          {/* Left column content */}
+          <div className="Coder-left">
+            <motion.h1
+              initial={{ y: 50, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 1 }}
+            >
+              <span className={`${arrayWide.className}`}>{"<CODER>"}</span>
+            </motion.h1>
+            <p className={`${anonymousPro.className}`}>
+              Passionate coder, solving one micro problem at a time
+            </p>
+          </div>
+        </div>
+
+        {/* Center column with overlapping images */}
+        <div className="image-column">
+          <div className="image-wrapper-l">
+            <Image
+              src={potraitL}
+              alt="portrait"
+              fill
+              style={{ objectFit: "cover", objectPosition: "center" }}
+              priority
+            />
+          </div>
+          <div className="image-wrapper-r">
+            <Image
+              src={potraitR}
+              alt="portrait"
+              fill
+              style={{ objectFit: "cover", objectPosition: "center" }}
+              priority
+            />
+          </div>
+        </div>
+
+        <div className="Port-right">
+          {/* Right column content */}
+          <div className="Design-right">
+            <h1 className={`${misto.className}`}>Designer</h1>
+            <p className={`${anonymousPro.className}`}>
+              Designer, specialising in creativity, UI and Design systems
+            </p>
+          </div>
+        </div>
+
+
+
+
+
+        {/* <div className="image-wrapper-l">
           <Image
             src={potraitL}
             alt="portrait"
@@ -207,7 +271,7 @@ const Portfolio = () => {
               Designer, specialising in creativity, UI and Design systems
             </p>
           </div>
-        </div>
+        </div> */}
 
         {/* Left Side (Coder) */}
 
@@ -265,7 +329,7 @@ const Portfolio = () => {
         <p className="subtitle">Full-Stack Developer</p>
         <a href="mailto:danielgraziotti99@gmail.com" className="email-btn">📧 danielgraziotti99@gmail.com</a>
       </section> */}
-      </div>
+      </div >
     </>
   );
 };

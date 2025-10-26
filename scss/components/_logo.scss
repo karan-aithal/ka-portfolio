@@ -22,6 +22,7 @@
     //z-index: 100001;
 
     @media (max-width: $md) {
+
         // assuming $md is defined in your variables file
         .Logo {
             width: 6rem; // adjusted width for smaller screens
@@ -30,6 +31,7 @@
     }
 
     @media (max-width: $sm) {
+
         // assuming $sm is defined in your variables file
         .Logo {
             display: none;
@@ -51,7 +53,9 @@
 
 .logo-span a {
     font-size: 26px;
-    color: #150811;
+    //color: #150811;
+    color: $neutral-50;
+    letter-spacing: 0.05em; // adjust value as needed
     margin: 0.5rem;
 
     @media (max-width: $lg) {
