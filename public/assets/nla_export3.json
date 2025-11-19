@@ -1,0 +1,20 @@
+[
+    {
+        "track": "Action",
+        "mute": false,
+        "solo": false,
+        "strips": [
+            {
+                "action": "Action",
+                "start_frame": 1.0,
+                "end_frame": 759.0,
+                "scale": 2.0,
+                "blend_type": "REPLACE",
+                "influence": 1.0,
+                "extrapolation": "NOTHING",
+                "strip_time": 0.0,
+                "use_reverse": false
+            }
+        ]
+    }
+]

@@ -1,0 +1,110 @@
+[
+    {
+        "track": "Idle",
+        "mute": false,
+        "solo": false,
+        "strips": [
+            {
+                "action": "Idle",
+                "start_frame": 140.0,
+                "end_frame": 376.0,
+                "scale": 1.0,
+                "blend_type": "COMBINE",
+                "influence": 1.0,
+                "extrapolation": "NOTHING",
+                "strip_time": 0.0,
+                "use_reverse": false
+            }
+        ]
+    },
+    {
+        "track": "RunFlip",
+        "mute": false,
+        "solo": false,
+        "strips": [
+            {
+                "action": "RunFlip",
+                "start_frame": 78.0,
+                "end_frame": 150.0,
+                "scale": 1.0,
+                "blend_type": "REPLACE",
+                "influence": 1.0,
+                "extrapolation": "NOTHING",
+                "strip_time": 0.0,
+                "use_reverse": false
+            }
+        ]
+    },
+    {
+        "track": "Jumping",
+        "mute": false,
+        "solo": false,
+        "strips": [
+            {
+                "action": "Jumping",
+                "start_frame": 41.0,
+                "end_frame": 79.0,
+                "scale": 1.0,
+                "blend_type": "REPLACE",
+                "influence": 1.0,
+                "extrapolation": "NOTHING",
+                "strip_time": 0.0,
+                "use_reverse": false
+            }
+        ]
+    },
+    {
+        "track": "Sprint",
+        "mute": false,
+        "solo": false,
+        "strips": [
+            {
+                "action": "Sprint",
+                "start_frame": 23.0,
+                "end_frame": 42.0,
+                "scale": 1.0,
+                "blend_type": "REPLACE",
+                "influence": 1.0,
+                "extrapolation": "NOTHING",
+                "strip_time": 0.0,
+                "use_reverse": false
+            }
+        ]
+    },
+    {
+        "track": "CrouchedSprint",
+        "mute": false,
+        "solo": false,
+        "strips": [
+            {
+                "action": "CrouchedSprint",
+                "start_frame": 2.0,
+                "end_frame": 24.0,
+                "scale": 1.0,
+                "blend_type": "REPLACE",
+                "influence": 1.0,
+                "extrapolation": "NOTHING",
+                "strip_time": 0.0,
+                "use_reverse": false
+            }
+        ]
+    },
+    {
+        "track": "APose",
+        "mute": false,
+        "solo": false,
+        "strips": [
+            {
+                "action": "APose",
+                "start_frame": 1.0,
+                "end_frame": 2.0,
+                "scale": 1.0,
+                "blend_type": "COMBINE",
+                "influence": 1.0,
+                "extrapolation": "NOTHING",
+                "strip_time": 0.0,
+                "use_reverse": false
+            }
+        ]
+    }
+]

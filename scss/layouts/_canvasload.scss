@@ -1,0 +1,66 @@
+.Loader-container {
+  width: 100%;
+  height: 100vh;
+  /* Full viewport height */
+  position: relative;
+  margin: 0 auto;
+  /* For z-index stacking if needed */
+  //display: flex;
+  //justify-content: center;
+  //align-items: center;
+  //overflow: hidden;
+
+  canvas {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: block;
+    z-index: 2;
+  }
+
+  &.tron {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 300%;
+    z-index: 1;
+
+    background-color: #0a0f1c;
+
+    background-image: linear-gradient(
+        to right,
+        rgba(0, 255, 255, 0.35) 2px,
+        transparent 2px
+      ),
+      linear-gradient(to bottom, rgba(0, 255, 255, 0.35) 2px, transparent 2px);
+    background-size: 40px 40px;
+
+    box-shadow: 0 0 20px #00fff7, 0 0 60px #00fff7 inset;
+
+    transform-origin: bottom;
+    transform: perspective(1200px) rotateX(58deg) scaleX(4) scaleY(4);
+
+    animation: tron-grid 2s linear infinite;
+  }
+
+  & .tron::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top, rgba(0, 15, 28, 0) 50%, #0a0f1c 100%);
+    pointer-events: none;
+  }
+
+  @keyframes tron-grid {
+    0% {
+      background-position: 0 0, 0 0;
+    }
+    100% {
+      background-position: 0 -100px, 0 -300px;
+    } /* move horizontal lines */
+  }
+}
