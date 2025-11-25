@@ -1,7 +1,7 @@
 import React from "react";
 
-import { useEffect } from "react";
-import { motion } from "framer-motion";
+import {useEffect} from "react";
+import {motion} from "framer-motion";
 import gsap from "gsap";
 
 import potraitL from "../../public/OG fake kush.png";
@@ -10,6 +10,8 @@ import potraitR from "../../public/OG Hyper fake kush.png";
 import Image from "next/image";
 
 import localFont from "next/font/local";
+import FogBackground from "./FogBgCss";
+import FogBg from "./FogBg";
 
 const misto = localFont({
   src: [
@@ -78,11 +80,9 @@ const Portfolio = () => {
 
     window.addEventListener("resize", handleResize);
 
-
     interface MouseMoveEvent extends MouseEvent {
       clientX: number;
     }
-
 
     const handleMouseMove = (e: MouseMoveEvent) => {
       const distance = Math.abs(e.clientX - centerX);
@@ -90,44 +90,44 @@ const Portfolio = () => {
       const opacity = 1 - distance / maxDistance;
 
       if (e.clientX < centerX) {
-        gsap.to(rightImage, { opacity, duration: 0.4 });
+        gsap.to(rightImage, {opacity, duration: 0.4});
       } else {
-        gsap.to(leftImage, { opacity, duration: 0.4 });
+        gsap.to(leftImage, {opacity, duration: 0.4});
       }
     };
 
     const handleMouseEnterLeft = () => {
       gsap.killTweensOf([rightText, rightImage, leftText, leftImage]);
       // Instantly hide right side
-      gsap.set(rightText, { autoAlpha: 0 });
-      gsap.set(rightImage, { autoAlpha: 0 });
+      gsap.set(rightText, {autoAlpha: 0});
+      gsap.set(rightImage, {autoAlpha: 0});
       // Instantly show left side (before animating)
-      gsap.set(leftText, { autoAlpha: 1 });
-      gsap.set(leftImage, { autoAlpha: 1 });
+      gsap.set(leftText, {autoAlpha: 1});
+      gsap.set(leftImage, {autoAlpha: 1});
       // Animate left side in
-      gsap.to(leftText, { scale: 1.2, duration: 0.3 });
-      gsap.to(leftImage, { x: offset, duration: 0.3 });
+      gsap.to(leftText, {scale: 1.2, duration: 0.3});
+      gsap.to(leftImage, {x: offset, duration: 0.3});
       window.addEventListener("mousemove", handleMouseMove);
     };
 
     const handleMouseEnterRight = () => {
       gsap.killTweensOf([rightText, rightImage, leftText, leftImage]);
       // Instantly hide left side
-      gsap.set(leftText, { autoAlpha: 0 });
-      gsap.set(leftImage, { autoAlpha: 0 });
+      gsap.set(leftText, {autoAlpha: 0});
+      gsap.set(leftImage, {autoAlpha: 0});
       // Instantly show right side (before animating)
-      gsap.set(rightText, { autoAlpha: 1 });
-      gsap.set(rightImage, { autoAlpha: 1 });
+      gsap.set(rightText, {autoAlpha: 1});
+      gsap.set(rightImage, {autoAlpha: 1});
       // Animate right side in
-      gsap.to(rightText, { scale: 1.2, duration: 0.3 });
-      gsap.to(rightImage, { x: -offset, duration: 0.3 });
+      gsap.to(rightText, {scale: 1.2, duration: 0.3});
+      gsap.to(rightImage, {x: -offset, duration: 0.3});
       window.addEventListener("mousemove", handleMouseMove);
     };
 
     const handleMouseLeave = () => {
       gsap.killTweensOf([rightText, rightImage, leftText, leftImage]);
       // Reset both sides instantly
-      gsap.set([leftText, rightText], { scale: 1 });
+      gsap.set([leftText, rightText], {scale: 1});
       // Animate leftImage back to x: 0, then hide it
       gsap.to(leftImage, {
         x: 0,
@@ -136,9 +136,9 @@ const Portfolio = () => {
         // fade out while moving
 
         onComplete: () => {
-          gsap.set(leftImage, { x: 0, autoAlpha: 0 });
-          gsap.set(rightImage, { x: 0, autoAlpha: 1 });
-          gsap.to([leftText, rightText], { autoAlpha: 1, duration: 0.8 });
+          gsap.set(leftImage, {x: 0, autoAlpha: 0});
+          gsap.set(rightImage, {x: 0, autoAlpha: 1});
+          gsap.to([leftText, rightText], {autoAlpha: 1, duration: 0.8});
         },
       });
       window.removeEventListener("mousemove", handleMouseMove);
@@ -165,9 +165,11 @@ const Portfolio = () => {
   return (
     <>
       {/* <div className="portfolio-container"> */}
-
+      <FogBg />
       <div className="container">
         {/* Extra FOG */}
+        {/* <FogBackground /> */}
+        {/* <FogBg /> */}
         {/* <div className="fog-container">
           <div className="fog-img fog-img-first"></div>
           <div className="fog-img fog-img-second"></div>
@@ -178,14 +180,13 @@ const Portfolio = () => {
         <a href="mailto:danielgraziotti99@gmail.com" className="email-btn">📧 danielgraziotti99@gmail.com</a>
       </section> */}
 
-
         <div className="Port-left">
           {/* Left column content */}
           <div className="Coder-left">
             <motion.h1
-              initial={{ y: 50, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 1 }}
+              initial={{y: 50, opacity: 0}}
+              animate={{y: 0, opacity: 1}}
+              transition={{duration: 1}}
             >
               <span className={`${arrayWide.className}`}>{"<CODER>"}</span>
             </motion.h1>
@@ -202,7 +203,7 @@ const Portfolio = () => {
               src={potraitL}
               alt="portrait"
               fill
-              style={{ objectFit: "cover", objectPosition: "center" }}
+              style={{objectFit: "cover", objectPosition: "center"}}
               priority
             />
           </div>
@@ -211,7 +212,7 @@ const Portfolio = () => {
               src={potraitR}
               alt="portrait"
               fill
-              style={{ objectFit: "cover", objectPosition: "center" }}
+              style={{objectFit: "cover", objectPosition: "center"}}
               priority
             />
           </div>
@@ -226,11 +227,6 @@ const Portfolio = () => {
             </p>
           </div>
         </div>
-
-
-
-
-
         {/* <div className="image-wrapper-l">
           <Image
             src={potraitL}
@@ -329,7 +325,7 @@ const Portfolio = () => {
         <p className="subtitle">Full-Stack Developer</p>
         <a href="mailto:danielgraziotti99@gmail.com" className="email-btn">📧 danielgraziotti99@gmail.com</a>
       </section> */}
-      </div >
+      </div>
     </>
   );
 };

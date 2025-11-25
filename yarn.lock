@@ -5334,10 +5334,10 @@ three@^0.170.0:
   resolved "https://registry.yarnpkg.com/three/-/three-0.170.0.tgz#6087f97aab79e9e9312f9c89fcef6808642dfbb7"
   integrity sha512-FQK+LEpYc0fBD+J8g6oSEyyNzjp+Q7Ks1C568WWaoMRLW+TkNNWmenWeGgJjV105Gd+p/2ql1ZcjYvNiPZBhuQ==
 
-three@^0.173.0:
-  version "0.173.0"
-  resolved "https://registry.yarnpkg.com/three/-/three-0.173.0.tgz#e82989961cd2db05768540458c81b29f565be921"
-  integrity sha512-AUwVmViIEUgBwxJJ7stnF0NkPpZxx1aZ6WiAbQ/Qq61h6I9UR4grXtZDmO8mnlaNORhHnIBlXJ1uBxILEKuVyw==
+three@^0.181.2:
+  version "0.181.2"
+  resolved "https://registry.yarnpkg.com/three/-/three-0.181.2.tgz#d54a8c8b4a409e346cbc60fed58244f1b382d6ea"
+  integrity sha512-k/CjiZ80bYss6Qs7/ex1TBlPD11whT9oKfT8oTGiHa34W4JRd1NiH/Tr1DbHWQ2/vMUypxksLnF2CfmlmM5XFQ==
 
 time-span@4.0.0:
   version "4.0.0"
@@ -5643,6 +5643,11 @@ v8-compile-cache-lib@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/v8-compile-cache-lib/-/v8-compile-cache-lib-3.0.1.tgz#6336e8d71965cb3d35a1bbb7868445a7c05264bf"
   integrity sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg==
+
+vanta@^0.5.24:
+  version "0.5.24"
+  resolved "https://registry.yarnpkg.com/vanta/-/vanta-0.5.24.tgz#46ec96b0b88cdcc57b7cee383e1d5f74bd3d4fb3"
+  integrity sha512-fvieEbHy1ZS23zrcX+topzqAgA4Uct1enngOEWLFBgs9TtOf6RDFOYatH7KSVdrABzQDMCQ5myQy+nTSZZwLzg==
 
 vercel@^34.0.0:
   version "34.4.0"

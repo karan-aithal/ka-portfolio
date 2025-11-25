@@ -164,7 +164,7 @@
   //object-fit: contain !important;
   //object-position: center !important;
   position: relative;
-  z-index: 2; // Above images
+  z-index: 0; // Above images
   background: transparent;
   cursor: pointer;
   transition:

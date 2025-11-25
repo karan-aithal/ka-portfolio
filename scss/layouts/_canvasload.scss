@@ -10,20 +10,40 @@
   //align-items: center;
   //overflow: hidden;
 
-  .StarfieldBackground {
+  // .StarfieldBackground {
+  //   position: absolute;
+  //   display: block;
+  //   inset: 0;
+  //   z-index: 0; /* lowest layer */
+  //   pointer-events: none;
+  //   width: 100%;
+  //   height: 100%;
+  //   margin: 0 auto;
+  //   //padding: auto;
+  //   //overflow: visible !important;
+  //   //overflow: hidden; /* keeps stars inside container */
+  //   top: -7%;
+  //   left: -25%;
+  // }
+
+  .starfield-container {
     position: absolute;
-    display: block;
     inset: 0;
-    z-index: 0; /* lowest layer */
-    pointer-events: none;
+    top: -7%; // portfolio has bottom -- 8% to match it we have -7% top
+    left: 50%; /* center the starfield */
+    width: 125%; /* wider than loader-container for full coverage */
+    height: 100vh;
+    transform: translateX(-50%); /* center horizontally */
+    background: rgb(10, 10, 10);
+    overflow: visible;
+    z-index: 0;
+  }
+
+  .starfield-canvas {
+    display: block;
     width: 100%;
     height: 100%;
-    margin: 0 auto;
-    //padding: auto;
-    //overflow: visible !important;
-    //overflow: hidden; /* keeps stars inside container */
-    top: -7%;
-    left: -25%;
+    z-index: 1;
   }
 
   canvas {

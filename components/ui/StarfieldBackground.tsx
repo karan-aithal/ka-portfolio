@@ -1,140 +1,210 @@
-import React from "react";
-import { ReactP5Wrapper } from "@p5-wrapper/react"; // Importing react-p5-wrapper
-import { useState, useEffect } from "react";
-import p5Types from "p5";
+"use client";
 
-type Sketch = (p5: p5Types) => void;
+import { useEffect, useRef } from "react";
+import * as THREE from "three";
+//import "@/public/styles/starfield.css";
 
-const starfieldSketch: Sketch = (p5: p5Types) => {
-  let stars: Star[] = [];
-  let viewPoint: p5Types.Vector;
+export default function StarfieldBackground() {
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
-  p5.setup = () => {
-    p5.createCanvas(p5.windowWidth, p5.windowHeight);
-    p5.frameRate(30);
-    setViewPoint(0, 0);
-    resetStarfield();
-  };
+  useEffect(() => {
+    if (!containerRef.current) return;
 
-  function resetStarfield() {
-    stars = [];
-  }
+    // const width = containerRef.current.offsetWidth;
+    // const height = containerRef.current.offsetHeight;
 
-  function setViewPoint(x: number, y: number) {
-    viewPoint = p5.createVector(
-      p5.map(x, 0, p5.width, 0, 15),
-      p5.map(y, 0, p5.height, 0, 15)
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    // Setup renderer + scene + camera
+    const renderer = new THREE.WebGLRenderer({ alpha: true });
+    renderer.setSize(width, height);
+    renderer.domElement.className = "starfield-canvas";
+    containerRef.current.appendChild(renderer.domElement);
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.OrthographicCamera(
+      width / -2,
+      width / 2,
+      height / 2,
+      height / -2,
+      -500,
+      1000
     );
-  }
 
-  p5.windowResized = () => {
-    p5.resizeCanvas(p5.windowWidth, p5.windowHeight);
-    resetStarfield();
-  };
+    let stars: Star[] = [];
+    let mouseDown = false;
+    let viewPoint = new THREE.Vector2(0, 0);
 
-  p5.doubleClicked = () => {
-    p5.fullscreen(!p5.fullscreen());
-  };
-
-  p5.mousePressed = () => {
-    p5.noCursor();
-  };
-
-  p5.mouseReleased = () => {
-    p5.cursor(p5.ARROW);
-  };
-
-  p5.draw = () => {
-    p5.clear();
-    p5.background(0);
-
-    // Mouse interaction
-    if (p5.mouseIsPressed) {
-      setViewPoint(p5.mouseX - p5.width / 2, p5.mouseY - p5.height / 2);
-      for (let i = 0; i < 20; i++) {
-        stars.push(new Star(createVectorTunnel()));
-      }
-    } else {
-      setViewPoint(0, 0);
-    }
-
-    // Base starfield
-    for (let i = 0; i < 15; i++) {
-      stars.push(new Star(createVectorField()));
-    }
-
-    // Draw
-    for (let i = stars.length - 1; i >= 0; i--) {
-      const star = stars[i];
-      if (star.isDead()) {
-        stars.splice(i, 1);
-      } else {
-        star.draw();
-      }
-    }
-  };
-
-  function createVectorTunnel() {
-    const radius = 50;
-    const angle = p5.random(0, 180);
-
-    const x = p5.width / 2 + radius * p5.cos(angle);
-    const y = p5.height / 2 + radius * p5.sin(angle);
-
-    return p5.createVector(x, y);
-  }
-
-  function createVectorField() {
-    return p5.createVector(p5.random(0, p5.width), p5.random(0, p5.height));
-  }
-
-  class Star {
-    color = 0;
-    size = 2;
-    position: p5Types.Vector;
-    vector: p5Types.Vector;
-    direction: p5Types.Vector;
-
-    constructor(position: p5Types.Vector) {
-      this.position = position;
-      this.vector = p5.createVector(
-        position.x - p5.width / 2,
-        position.y - p5.height / 2
+    function setViewPoint(x: number, y: number) {
+      viewPoint.x = THREE.MathUtils.mapLinear(
+        x,
+        -width / 2,
+        width / 2,
+        -15,
+        15
       );
-      this.direction = this.vector.copy().normalize();
-    }
-
-    draw() {
-      p5.noStroke();
-      p5.fill(p5.map(this.color, 0, 100, 0, 254));
-
-      this.direction.mult(p5.random(1.07, 1.1));
-      this.position.add(this.direction);
-      this.position.add(viewPoint);
-
-      p5.ellipse(this.position.x, this.position.y, this.size);
-
-      this.size += 0.05;
-      if (this.color < 100) this.color += 3;
-    }
-
-    isDead() {
-      return (
-        this.position.x < 0 ||
-        this.position.y < 0 ||
-        this.position.x > p5.width ||
-        this.position.y > p5.height
+      viewPoint.y = THREE.MathUtils.mapLinear(
+        y,
+        -height / 2,
+        height / 2,
+        -15,
+        15
       );
     }
-  }
-};
 
-const StarfieldBackground: React.FC = () => {
-  return (
-    <div className="StarfieldBackground">
-      <ReactP5Wrapper sketch={starfieldSketch} />
-    </div>
-  );
-};
+    // ------------------------------
+    // STAR CLASS (exact p5 logic)
+    // ------------------------------
+    class Star {
+      mesh: THREE.Mesh;
+      position: THREE.Vector2;
+      direction: THREE.Vector2;
+      colorVal = 0;
+      size: number;
 
-export default StarfieldBackground;
+      constructor(p: THREE.Vector2) {
+        const geo = new THREE.PlaneGeometry(1, 1);
+        const mat = new THREE.MeshBasicMaterial({
+          color: new THREE.Color("white"),
+          transparent: true,
+        });
+
+        this.size = THREE.MathUtils.randFloat(0.5, 1.5);
+        this.mesh = new THREE.Mesh(geo, mat);
+        this.position = p.clone();
+
+        // vector from center
+        const v = new THREE.Vector2(p.x - width / 2, p.y - height / 2);
+        this.direction = v.normalize();
+
+        scene.add(this.mesh);
+      }
+
+      update() {
+        // p5 behavior: accelerate a bit each frame
+        const accel = THREE.MathUtils.randFloat(1.07, 1.1);
+        this.direction.multiplyScalar(accel);
+
+        // move outward + viewpoint offset
+        this.position.add(this.direction);
+        this.position.add(viewPoint);
+
+        // brightness fade-in
+        if (this.colorVal < 100) this.colorVal += 3;
+        const b = this.colorVal / 100;
+
+        // update material brightness
+        (this.mesh.material as THREE.MeshBasicMaterial).color.setRGB(b, b, b);
+
+        // grow slightly like p5
+        this.size += 0.05;
+        this.mesh.scale.set(this.size, this.size, 1);
+
+        // update mesh position
+        this.mesh.position.set(
+          this.position.x - width / 2,
+          height / 2 - this.position.y,
+          0
+        );
+      }
+
+      isDead() {
+        return (
+          this.position.x < 0 ||
+          this.position.y < 0 ||
+          this.position.x > width ||
+          this.position.y > height
+        );
+      }
+
+      remove() {
+        scene.remove(this.mesh);
+        this.mesh.geometry.dispose();
+        (this.mesh.material as any).dispose();
+      }
+    }
+
+    // -----------------------------------------------------------
+    // SPAWN FUNCTIONS (exactly like p5)
+    // -----------------------------------------------------------
+
+    function spawnFieldStar() {
+      // uniform rectangular distribution (CSS-like)
+      const x = Math.random() * width;
+      const y = Math.random() * height;
+      return new THREE.Vector2(x, y);
+    }
+
+    function spawnTunnelStar() {
+      const radius = 50;
+      const angle = Math.random() * Math.PI * 2;
+
+      const x = width / 2 + radius * Math.cos(angle);
+      const y = height / 2 + radius * Math.sin(angle);
+
+      return new THREE.Vector2(x, y);
+    }
+
+    // -----------------------------------------------------------
+    // MOUSE EVENTS – identical to p5 behavior
+    // -----------------------------------------------------------
+    window.addEventListener("mousedown", (e) => {
+      mouseDown = true;
+      document.body.style.cursor = "none";
+    });
+
+    window.addEventListener("mouseup", () => {
+      mouseDown = false;
+      document.body.style.cursor = "default";
+      viewPoint.set(0, 0);
+    });
+
+    window.addEventListener("mousemove", (e) => {
+      if (!mouseDown) return;
+      setViewPoint(e.clientX - width / 2, e.clientY - height / 2);
+    });
+
+    // -----------------------------------------------------------
+    // MAIN LOOP
+    // -----------------------------------------------------------
+    function animate() {
+      requestAnimationFrame(animate);
+
+      // tunnel spawn when clicking (20 per frame)
+      if (mouseDown) {
+        for (let i = 0; i < 8; i++) {
+          stars.push(new Star(spawnTunnelStar()));
+        }
+      }
+
+      // field stars (15 per frame)
+      for (let i = 0; i < 8; i++) {
+        stars.push(new Star(spawnFieldStar()));
+      }
+
+      // update + remove
+      for (let i = stars.length - 1; i >= 0; i--) {
+        const s = stars[i];
+        s.update();
+
+        // if (s.isDead()) {
+        //   s.remove();
+        //   stars.splice(i, 1);
+        // }
+      }
+
+      renderer.render(scene, camera);
+    }
+
+    animate();
+
+    // cleanup
+    return () => {
+      stars.forEach((s) => s.remove());
+      renderer.dispose();
+      containerRef.current?.removeChild(renderer.domElement);
+    };
+  }, []);
+
+  return <div ref={containerRef} className="starfield-container" />;
+}

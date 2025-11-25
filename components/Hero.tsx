@@ -91,6 +91,7 @@ import { Spotlight } from "./ui/Spotlight";
 //import Portfolio from "./ui/Portfolio";
 
 import Portfolio from "./ui/Portfolio";
+import FogBg from "./ui/FogBg";
 
 const Hero = () => {
   return (
