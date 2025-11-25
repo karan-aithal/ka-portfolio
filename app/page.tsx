@@ -16,6 +16,7 @@ import "@/scss/app.scss";
 
 import Portfolio from "./../components/ui/Portfolio";
 import { CanvasLoad } from "@/components/ui/CanvasLoad";
+import StarfieldBackground from "./../components/ui/StarfieldBackground";
 
 const Home = () => {
   return (
@@ -29,9 +30,11 @@ const Home = () => {
         <Logo />
         <Hero />
         <Portfolio />
+
         <CanvasLoad />
+
         {/* <>Canvas </> // canvas for animation entry for character same background as tron or matrix  */}
-        
+
         {/* logo is visible when disabling Hero  */}
         <Grid />
         <RecentProjects />

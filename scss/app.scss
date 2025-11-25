@@ -40,8 +40,8 @@
 // default margin of body is 8px fix;
 
 html {
-	//overflow: hidden; // parallax
-	font-size: 62.5%
+  //overflow: hidden; // parallax
+  font-size: 62.5%;
 }
 
 // html, body
@@ -61,30 +61,41 @@ html {
 // }
 
 .main-container {
-	position: relative;
-	background-color: #01031a; // #18181b; // black(100)
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	overflow: hidden;
-	margin: 0 auto;
-	padding: 0;
-	width: 100%;
+  position: relative;
+  background-color: #01031a; // #18181b; // black(100)
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  margin: 0 auto;
+  padding: 0;
+  width: 100%;
 
-	@media (min-width: 640px) {
-		padding-left: 2.5rem;
-		padding-right: 2.5rem;
-	}
+  @media (min-width: 640px) {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
 
-	.inner-container {
-		//max-width: 80rem;
-		width: 80vw;
-		max-width: 100vw;
-		margin-left: 0;
-		margin-right: 0;
-	}
+  .inner-container {
+    //max-width: 80rem;
+    width: 80vw;
+    max-width: 100vw;
+    margin-left: 0;
+    margin-right: 0;
+  }
 }
 
+.StarfieldBackground {
+  position: absolute;
+  inset: 0;
+  z-index: 0; /* lowest layer */
+  // pointer-events: none;
+  width: 100%;
+  height: 100vh;
+  // margin: 0 auto;
+
+  //overflow: hidden; /* keeps stars inside container */
+}
 // .main-container {
 // 	position: relative;
 // 	background-color: black(100);

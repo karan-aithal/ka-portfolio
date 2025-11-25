@@ -16,6 +16,8 @@ import "@/scss/layouts/_canvasload.scss";
 import nlaData from "../../public/assets/nla_export3.json"; // <-- your exported NLA strips
 const nlaJSON = [...nlaData];
 
+import StarfieldBackground from "../ui/StarfieldBackground";
+
 interface CanvasLoadProps {
   modelUrl?: string;
 }
@@ -43,6 +45,7 @@ export const CanvasLoad: React.FC<CanvasLoadProps> = ({
 
   return (
     <div className="Loader-container">
+      <StarfieldBackground />
       <Canvas shadows camera={{ position: [0, 2, 20], fov: 30 }}>
         <FixedCamera />
         <ambientLight intensity={0.5} />
