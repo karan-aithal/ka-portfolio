@@ -92,6 +92,7 @@ import { Spotlight } from "./ui/Spotlight";
 
 import Portfolio from "./ui/Portfolio";
 import FogBg from "./ui/FogBg";
+import CloudShaderBackground from "../components/3D/shaders/CloudShaderBackground";
 
 const Hero = () => {
   return (
@@ -120,7 +121,14 @@ const Hero = () => {
       </div>
 
       <div className="hero__grid-container tron"></div>
-      {/* <Portfolio/> */}
+      {/* <FogBg /> */}
+      <CloudShaderBackground />
+      {/* <CloudShaderBackground>
+        <h1 style={{ color: "white", textAlign: "center", paddingTop: "40vh" }}>
+          Cloud Shader Background
+        </h1>
+      </CloudShaderBackground> */}
+      <Portfolio />
       {/* //add portfolio her if wanted */}
     </div>
   );

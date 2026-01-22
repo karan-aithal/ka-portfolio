@@ -4,6 +4,7 @@
   /* Full viewport height */
   position: relative;
   margin: 0 auto;
+
   /* For z-index stacking if needed */
   //display: flex;
   //justify-content: center;
@@ -25,15 +26,33 @@
   //   top: -7%;
   //   left: -25%;
   // }
+  .synthwave-container {
+    position: absolute;
+    // position: absolute;
+    top: -7%; // portfolio has bottom -- 8% to match it we have -7% top
+    bottom: 0%;
+    left: 50%;
+    /* center the starfield */
+    width: 125%;
+    scroll-snap-align: start;
+    // width: 100%;
+    height: 100vh;
+    transform: translateX(-50%);
+    overflow: visible;
+    z-index: 1;
+  }
 
   .starfield-container {
     position: absolute;
     inset: 0;
     top: -7%; // portfolio has bottom -- 8% to match it we have -7% top
-    left: 50%; /* center the starfield */
-    width: 125%; /* wider than loader-container for full coverage */
+    left: 50%;
+    /* center the starfield */
+    width: 125%;
+    /* wider than loader-container for full coverage */
     height: 100vh;
-    transform: translateX(-50%); /* center horizontally */
+    transform: translateX(-50%);
+    /* center horizontally */
     background: rgb(10, 10, 10);
     overflow: visible;
     z-index: 0;
@@ -47,6 +66,7 @@
   }
 
   canvas {
+    //top: 8%;
     position: absolute;
     width: 100%;
     height: 100%;
@@ -56,7 +76,7 @@
 
   &.tron {
     position: absolute;
-    bottom: 10%;
+    bottom: 0%;
     left: 0;
     width: 100%;
     height: 300%;
@@ -64,11 +84,9 @@
 
     background-color: #0a0f1c;
 
-    background-image: linear-gradient(
-        to right,
+    background-image: linear-gradient(to right,
         rgba(0, 255, 255, 0.35) 2px,
-        transparent 2px
-      ),
+        transparent 2px),
       linear-gradient(to bottom, rgba(0, 255, 255, 0.35) 2px, transparent 2px);
     background-size: 40px 40px;
 
@@ -95,8 +113,11 @@
     0% {
       background-position: 0 0, 0 0;
     }
+
     100% {
       background-position: 0 -100px, 0 -300px;
-    } /* move horizontal lines */
+    }
+
+    /* move horizontal lines */
   }
 }

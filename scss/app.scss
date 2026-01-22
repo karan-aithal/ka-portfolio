@@ -42,6 +42,13 @@
 html {
   //overflow: hidden; // parallax
   font-size: 62.5%;
+
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 // html, body
@@ -59,6 +66,25 @@ html {
 // 	height: 100vh;
 // 	width: auto;
 // }
+#fixed-overlay-root {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.fixed-canvas-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  // z-index: 20;
+  pointer-events: none;
+}
+
+.fixed-canvas-overlay canvas {
+  pointer-events: auto;
+}
 
 .main-container {
   position: relative;
@@ -84,6 +110,52 @@ html {
     margin-right: 0;
   }
 }
+
+
+.sticky-cards {
+  position: relative;
+  //width: 100vw;
+  background-color: #01031a;
+}
+
+.card {
+  position: sticky;
+  width: 100%;
+  transform-style: preserve-3d;
+  // height: 100vh;
+  perspective: 1200px;
+}
+
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  transform-origin: 50% 100%;
+  //transform-style: preserve-3d;
+  will-change: transform;
+
+}
+
+.card-inner::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: var(--after-opacity, 0);
+  will-change: opacity;
+  pointer-events: none;
+
+  z-index: 2;
+}
+
+
+
+
+
 
 // .StarfieldBackground {
 //   position: absolute;

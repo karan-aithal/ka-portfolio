@@ -1,7 +1,10 @@
 import React, { useEffect, useRef } from "react";
-import { AnimationAction, AnimationMixer, LoopRepeat, LoopOnce } from "three";
+import { AnimationAction, AnimationMixer, LoopRepeat } from "three";
 import gsap from "gsap";
-import * as THREE from "three";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+// Register ScrollTrigger plugin
+gsap.registerPlugin(ScrollTrigger);
 
 export interface NLAStrip {
   action: string;
@@ -27,254 +30,217 @@ interface ModelAnimNLEProps {
   mixer: AnimationMixer;
   nlaData: NLATrack[];
   blenderFPS: number;
+  onScrollProgress?: (progress: number) => void;
 }
+
+/**
+ * ModelAnimNLE - Scroll-controlled 3D model animation
+ * 
+ * Controls model animation based on scroll position using GSAP ScrollTrigger.
+ * - Scroll down: Play animation forward (frames 3→250)
+ * - Scroll up: Reverse animation
+ * - Scroll past: Auto-loop last 60 frames (190→250)
+ */
 export const ModelAnimNLE: React.FC<ModelAnimNLEProps> = ({
   actions,
   mixer,
   nlaData,
   blenderFPS,
+  onScrollProgress,
 }) => {
-  const currentAction = useRef<AnimationAction | null>(null);
-  const tlRef = useRef<gsap.core.Timeline | null>(null);
-  const canStart = useRef(false);
+  const actionRef = useRef<AnimationAction | null>(null);
+  const animFrameRef = useRef<number | null>(null);
+  const isLooping = useRef(false); // Track if auto-loop is active
+  const loopListenerRef = useRef<((e: any) => void) | null>(null);
+  const scrollProgress = useRef(0);
 
-  // --------- SCROLL OBSERVER ----------
-  useEffect(() => {
-    const section = document.querySelector(".Loader-container");
-    if (!section) return;
+  // Convert frame number to seconds
+  const f = (frame: number) => frame / blenderFPS;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          canStart.current = true;
-          if (tlRef.current) tlRef.current.resume();
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.4 }
-    );
+  // --------- AUTO-LOOP (activates after scrolling past section) ----------
+  const startAutoLoop = (action: AnimationAction) => {
+    if (isLooping.current) return;
 
-    observer.observe(section);
-  }, []);
+    const loopStart = 190 / blenderFPS; // Last 60 frames (250 - 60 = 190)
+    const loopEnd = 250 / blenderFPS;
 
-  // --------- PLAY ACTION ----------
-
-  const playAction = (action: AnimationAction, startFrame: number) => {
-    const startSec = startFrame / blenderFPS;
-
-    action.enabled = true;
-    action.reset();
-    action.setEffectiveWeight(1);
-    action.time = startSec;
-    action.paused = false;
-    action.play();
-
-    const speed = 1 / nlaData[0].strips[0].scale; // your scale
-    action.timeScale = speed;
-
-    currentAction.current = action;
-  };
-
-  // --------- LOOP ONLY 300 → 750 ----------
-  const loopRange = (action: AnimationAction) => {
-    const loopStart = 300 / blenderFPS;
-    const loopEnd = 750 / blenderFPS;
+    console.log("🔁 Starting auto-loop: frames 190 → 250 (last 60 frames)");
 
     action.setLoop(LoopRepeat, Infinity);
+    action.clampWhenFinished = false;
+    action.time = loopStart;
+    action.paused = false; // Allow time-based playback
+    action.timeScale = 1 / nlaData[0].strips[0].scale;
+    action.play();
 
-    mixer.addEventListener("loop", () => {
+    // Clamp animation to loop range
+    if (loopListenerRef.current) {
+      mixer.removeEventListener("loop", loopListenerRef.current);
+    }
+
+    const loopListener = () => {
       if (action.time >= loopEnd) {
         action.time = loopStart;
       }
-    });
+    };
 
-    action.time = loopStart;
+    loopListenerRef.current = loopListener;
+    mixer.addEventListener("loop", loopListener);
+    isLooping.current = true;
   };
 
-  // --------- GSAP TIMELINE ----------
+  // --------- STOP AUTO LOOP (when scrolling back) ----------
+  const stopAutoLoop = (action: AnimationAction) => {
+    if (!isLooping.current) return;
+
+    console.log("⏹️ Stopping auto-loop");
+
+    action.paused = true;
+
+    if (loopListenerRef.current) {
+      mixer.removeEventListener("loop", loopListenerRef.current);
+      loopListenerRef.current = null;
+    }
+
+    isLooping.current = false;
+  };
+
+  // Smooth easing function for cleaner scrubbing
+  const easeInOutQuad = (t: number): number => {
+    return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+  };
+
+  // --------- SCROLL-TO-FRAME MAPPING ----------
+  // Maps scroll progress (0-1) to specific animation frames
+  const updateAnimationFromScroll = (progress: number) => {
+    if (!actionRef.current) return;
+
+    const action = actionRef.current;
+
+    // Phase 1: Intro (0-20% scroll) → frames 3-60
+    if (progress <= 0.2) {
+      const phaseProgress = progress / 0.2;
+      const frame = 3 + phaseProgress * (60 - 3);
+      action.time = f(frame);
+    }
+    // Phase 2: Main animation (20-95% scroll) → frames 60-250 with easing
+    else if (progress <= 0.95) {
+      const phaseProgress = (progress - 0.2) / 0.75;
+      const easedProgress = easeInOutQuad(phaseProgress); // Smooth acceleration/deceleration
+      const frame = 60 + easedProgress * (250 - 60);
+      action.time = f(frame);
+    }
+    // Phase 3: Hold final frame (95-100% scroll)
+    else {
+      action.time = f(250);
+    }
+
+    mixer.update(0); // Apply frame without advancing time
+  };
+
+  // --------- SCROLLTRIGGER SETUP ----------
   useEffect(() => {
     if (!actions || !nlaData) return;
 
     const strip = nlaData[0].strips[0];
     const action = actions[strip.action];
+    if (!action) return;
 
-    const tl = gsap.timeline({ paused: true });
-    tlRef.current = tl;
+    // Setup: Pause action and control it manually via scroll
+    action.enabled = true;
+    action.reset();
+    action.setEffectiveWeight(1);
+    action.paused = true; // Pause - we control time via scroll
+    action.time = f(3); // Start at frame 3 (skip A-pose)
+    action.play();
+    actionRef.current = action;
 
-    // Frame → Seconds
-    const f = (frame: number) => frame / blenderFPS;
+    console.log("🎬 Animation ready for scroll control");
 
-    // 1) PLAY from frame 1 → frame 6
-    tl.to(
-      {},
-      {
-        duration: f(6 - 1),
-        onStart: () => playAction(action, 1),
-      }
-    );
+    // Configure ScrollTrigger: 4000px scroll distance to complete animation
+    const st = ScrollTrigger.create({
+      trigger: ".Loader-container",
+      start: "top top", // Pin when section reaches viewport top
+      end: "+=4000", // Unpin after 4000px of scroll
+      scrub: 5, // Smooth delay (higher = more lag)
+      pin: true, // Keep section fixed during animation
+      markers: true, // Debug markers (remove in production)
 
-    // 2) PAUSE at frame 6 for 5 seconds
-    tl.to(
-      {},
-      {
-        duration: 0.01,
-        onStart: () => {
-          action.time = f(6); // perform assignment
-        },
-      }
-    );
-    tl.to({}, { duration: 5 });
+      onUpdate: (self) => {
+        scrollProgress.current = self.progress;
 
-    // 3) Continue animation normally (frame 6 → 759)
-    tl.to(
-      {},
-      {
-        duration: f(759 - 6),
-        onStart: () => {
-          action.paused = false;
-        },
-      }
-    );
+        // Notify parent of scroll progress
+        if (onScrollProgress) {
+          onScrollProgress(self.progress);
+        }
 
-    // 4) Finally loop frames 300 → 750 forever
-    tl.to(
-      {},
-      {
-        duration: 0.01,
-        onStart: () => loopRange(action),
-      }
-    );
+        // Only update if not looping
+        if (!isLooping.current) {
+          updateAnimationFromScroll(self.progress);
+        }
 
-    if (canStart.current) tl.play();
+        if (self.progress < 1) {
+          console.log(`📊 Scroll: ${(self.progress * 100).toFixed(1)}%`);
+        }
+      },
 
+      onEnter: () => {
+        console.log("🎯 Entered scroll zone");
+        stopAutoLoop(action);
+      },
+
+      onLeave: () => {
+        console.log("👋 Scroll complete - starting auto-loop");
+        startAutoLoop(action);
+      },
+
+      onEnterBack: () => {
+        console.log("🔙 Scrolled back - enabling reverse control");
+        stopAutoLoop(action);
+        updateAnimationFromScroll(scrollProgress.current);
+      },
+
+      onLeaveBack: () => {
+        console.log("⬆️ Scrolled above section");
+      },
+    });
+
+    // Cleanup
     return () => {
-      tl.kill(); // ✔ cleanup function returning void
+      console.log("🧹 Cleaning up ScrollTrigger");
+      st.kill();
+      stopAutoLoop(action);
+      actionRef.current = null;
     };
-  }, [actions, nlaData, blenderFPS]);
+  }, [actions, nlaData, blenderFPS, mixer]);
 
   // --------- MIXER UPDATE LOOP ----------
+  // Updates animation system on every frame
   useEffect(() => {
     let last = performance.now();
+
     const update = () => {
       const now = performance.now();
       const dt = (now - last) / 1000;
       last = now;
 
-      mixer.update(dt);
-      requestAnimationFrame(update);
+      // Only advance time when auto-looping (not during scroll control)
+      if (isLooping.current) {
+        mixer.update(dt);
+      }
+
+      animFrameRef.current = requestAnimationFrame(update);
     };
-    update();
+
+    animFrameRef.current = requestAnimationFrame(update);
+
+    return () => {
+      if (animFrameRef.current !== null) {
+        cancelAnimationFrame(animFrameRef.current);
+        animFrameRef.current = null;
+      }
+    };
   }, [mixer]);
 
   return null;
 };
-
-// export const ModelAnimNLE: React.FC<ModelAnimNLEProps> = ({
-//   actions,
-//   mixer,
-//   nlaData,
-//   blenderFPS,
-// }) => {
-//   const currentAction = useRef<AnimationAction | null>(null);
-//   const tlRef = useRef<gsap.core.Timeline | null>(null);
-//   const canStart = useRef(false);
-
-//   const playStrip = (nextAction: AnimationAction, strip: NLAStrip): void => {
-//     const startSec = strip.start_frame / blenderFPS;
-
-//     // --- PRIME THE POSE FIRST ---
-//     nextAction.enabled = true;
-//     nextAction.setEffectiveWeight(1);
-
-//     nextAction.reset();
-//     nextAction.time = startSec;
-//     nextAction.paused = true;
-//     nextAction.play();
-
-//     // Force evaluation so bones move into the correct starting pose
-//     mixer.update(0);
-
-//     // --- Now safe to unpause
-//     nextAction.paused = false;
-
-//     // Set playback speed
-//     //nextAction.timeScale = strip.use_reverse ? -strip.scale : strip.scale;
-//     const speed = 1 / strip.scale; // if strip.scale = 4 → speed = 0.25
-//     nextAction.timeScale = strip.use_reverse ? -speed : speed;
-
-//     nextAction.setLoop(LoopOnce, 1);
-//     nextAction.clampWhenFinished = false;
-
-//     // --- CROSSFADE ---
-//     const prev = currentAction.current;
-
-//     if (prev && prev !== nextAction) {
-//       prev.enabled = true;
-//       prev.setEffectiveWeight(1);
-
-//       prev.crossFadeTo(nextAction, 0.25, false);
-//     } else {
-//       nextAction.play();
-//     }
-
-//     currentAction.current = nextAction;
-//   };
-
-//   // Play NLA strips in order
-//   // Build sorted NLA strips ONCE
-//   useEffect(() => {
-//     if (!actions || !nlaData) return;
-
-//     const tl = gsap.timeline({ repeat: -1 });
-
-//     // Flatten & sort strips correctly
-//     const sortedStrips = nlaData
-//       .flatMap((track) => track.strips)
-//       .sort((a, b) => a.start_frame - b.start_frame);
-
-//     sortedStrips.forEach((strip) => {
-//       const action = actions[strip.action]; // action name → AnimationAction
-//       if (!action) return;
-
-//       const duration = (strip.end_frame - strip.start_frame) / blenderFPS;
-
-//       tl.to(
-//         {},
-//         {
-//           duration,
-//           onStart: () => {
-//             playStrip(action, strip); // ✔ returns void now
-//           },
-//         }
-//       );
-//     });
-
-//     // return () => tl.kill();
-//     return () => {
-//       tl.kill(); // ✔ cleanup function returning void
-//     };
-//   }, [actions, nlaData, blenderFPS]);
-
-//   // Update mixer every frame with Blender FPS
-//   useEffect(() => {
-//     let lastTime = performance.now();
-
-//     const update = () => {
-//       const now = performance.now();
-//       const dt = (now - lastTime) / 1000;
-//       lastTime = now;
-
-//       mixer.update(dt);
-
-//       requestAnimationFrame(update);
-//     };
-
-//     update();
-//     return () => {};
-//   }, [mixer]);
-
-//   return null;
-// };
-
-// 🔹 ACTION KEYS: Array(6)0: "Idle"1: "RunFlip"2: "Jumping"3: "Sprint"4: "CrouchedSprint"5: "APose"length: 6[[Prototype]]: Array(0)
-// console.js:44 🔹 CLIP NAMES: Array(6)0: "Idle"1: "RunFlip"2: "Jumping"3: "Sprint"4: "CrouchedSprint"5: "APose"length: 6[[Prototype]]: Array(0)

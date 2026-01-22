@@ -9,6 +9,7 @@
     // margin-bottom: 0; // Remove if you don't want extra space
     width: 100%;
 
+
     &__spotlight-container {
         position: absolute;
         top: 0;
@@ -22,20 +23,25 @@
     // Hero grid container - First div
     &__grid-container {
         height: 100vh;
-        width: 100vw;
+        //width: 100vw;
         position: absolute;
-        top: 0;
+        top: 9%;
         left: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
+        right: 0;
+        bottom: 0;
+        // left: 50%; // expand to full viewport width
+        //margin-left: -50vw; //expand to full viewport width
+        // display: flex;
+        // align-items: center;
+        // justify-content: center;
+        z-index: -3;
         // Light mode styles
         background-color: white;
         background-image: linear-gradient(to right, rgba(0, 0, 0, 0.25) 1.5px, transparent 1.5px),
             linear-gradient(to bottom, rgba(0, 0, 0, 0.25) 1.5px, transparent 1.5px);
         background-size: 80px 80px;
         opacity: 1;
+        // position: fixed;
 
         // Dark mode styles -- default
         @media (prefers-color-scheme: dark) {
@@ -54,6 +60,7 @@
 
             transform-origin: bottom;
             transform: perspective(400px) rotateX(40deg) scale(2, 1) translateZ(0);
+            z-index: -1;
         }
 
         // Optional: Tron grid in dark mode only
@@ -82,9 +89,9 @@
         right: 0;
         bottom: 0;
         left: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        // display: flex;
+        // align-items: center;
+        // justify-content: center;
 
         // Mask image for radial gradient effect
         // Light mode
