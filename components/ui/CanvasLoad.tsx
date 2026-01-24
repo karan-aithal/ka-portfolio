@@ -1,5 +1,5 @@
 import React, { Suspense, useState, useRef, useEffect } from "react";
-import { Canvas, useThree } from "@react-three/fiber";
+import { Canvas, useThree, useFrame } from "@react-three/fiber";
 import {
   OrbitControls,
   Environment,
@@ -38,10 +38,30 @@ function FixedCamera() {
   return null;
 }
 
+function HeartCamera({ target }: { target: THREE.Object3D | null }) {
+  const { camera } = useThree();
+  const temp = new THREE.Vector3();
+
+  useFrame(() => {
+    if (!target) return;
+
+    // Get bone world position
+    target.getWorldPosition(temp);
+
+    // Offset slightly forward
+    const desired = temp.clone().add(new THREE.Vector3(0, 0.2, 1.2));
+
+    camera.position.lerp(desired, 0.08);
+    camera.lookAt(temp);
+  });
+
+  return null;
+}
+
 
 
 export const CanvasLoad: React.FC<CanvasLoadProps> = ({
-  modelUrl = "/assets/AnimnSingleBake.glb",
+  modelUrl = "/assets/ModelAnimSingleBakewHeartblend.glb",
 }) => {
   const [hovered, setHovered] = useState(false);
   const [actions, setActions] = useState<{
@@ -52,7 +72,9 @@ export const CanvasLoad: React.FC<CanvasLoadProps> = ({
   const [isFixed, setIsFixed] = useState(false);
   const [shaderDone, setShaderDone] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const heartTargetRef = useRef<THREE.Object3D | null>(null);
 
+  const [focusHeart, setFocusHeart] = useState(false);
   // Disabled: ScrollTrigger handles pinning now
   // useStickWhenTopReached(containerRef, setIsFixed);
 
@@ -73,6 +95,9 @@ export const CanvasLoad: React.FC<CanvasLoadProps> = ({
             }
             onPointerOver={() => setHovered(true)}
             onPointerOut={() => setHovered(false)}
+            onHeartTargetFound={(obj) => {
+              heartTargetRef.current = obj;
+            }}
           />
           {actions && (
             <ModelAnimNLE
@@ -81,7 +106,11 @@ export const CanvasLoad: React.FC<CanvasLoadProps> = ({
               nlaData={nlaJSON}
               blenderFPS={24}
               onScrollProgress={setScrollProgress}
+              onAnimationComplete={() => setFocusHeart(true)} // 👈 HERE
             />
+          )}
+          {focusHeart && (
+            <HeartCamera target={heartTargetRef.current} />
           )}
           <Environment preset="sunset" />
         </Suspense>
@@ -102,9 +131,14 @@ export const CanvasLoad: React.FC<CanvasLoadProps> = ({
   );
 
   return (
-    <div ref={containerRef} className="Loader-container">
-      {CanvasStack}
-    </div>
+    <>
+      <div ref={containerRef} className="Loader-container">
+        {CanvasStack}
+      </div>
+      <div className="heartPlaceholder"> doc
+        {/* dock */}
+      </div>
+    </>
   );
 };
 

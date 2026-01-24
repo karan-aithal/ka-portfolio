@@ -31,6 +31,7 @@ interface ModelAnimNLEProps {
   nlaData: NLATrack[];
   blenderFPS: number;
   onScrollProgress?: (progress: number) => void;
+  onAnimationComplete?: () => void; // 👈 ADD THIS
 }
 
 /**
@@ -47,6 +48,7 @@ export const ModelAnimNLE: React.FC<ModelAnimNLEProps> = ({
   nlaData,
   blenderFPS,
   onScrollProgress,
+  onAnimationComplete,
 }) => {
   const actionRef = useRef<AnimationAction | null>(null);
   const animFrameRef = useRef<number | null>(null);
@@ -159,11 +161,14 @@ export const ModelAnimNLE: React.FC<ModelAnimNLEProps> = ({
 
     // Configure ScrollTrigger: 4000px scroll distance to complete animation
     const st = ScrollTrigger.create({
-      trigger: ".Loader-container",
+      // trigger: ".Loader-container",
+      trigger: "#card2",
       start: "top top", // Pin when section reaches viewport top
-      end: "+=4000", // Unpin after 4000px of scroll
-      scrub: 5, // Smooth delay (higher = more lag)
+      // end: "+=4000", // Unpin after 4000px of scroll
+      end: () => "+=5000",
+      scrub: 13, // Smooth delay (higher = more lag)
       pin: true, // Keep section fixed during animation
+      pinSpacing: true,
       markers: true, // Debug markers (remove in production)
 
       onUpdate: (self) => {
@@ -191,7 +196,13 @@ export const ModelAnimNLE: React.FC<ModelAnimNLEProps> = ({
 
       onLeave: () => {
         console.log("👋 Scroll complete - starting auto-loop");
-        startAutoLoop(action);
+        // startAutoLoop(action);
+        // Lock to final frame (A-pose)
+        action.time = f(250);
+        mixer.update(0);
+
+        // Notify parent ONCE
+        onAnimationComplete?.();
       },
 
       onEnterBack: () => {

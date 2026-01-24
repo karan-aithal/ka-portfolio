@@ -4,7 +4,13 @@
   /* Full viewport height */
   position: relative;
   margin: 0 auto;
-
+  // position: relative !important; // Override sticky from .card
+  // transform: none !important; // Reset any inherited transforms
+  // transform-origin: initial !important; // Reset from .card-inner
+  // will-change: auto !important; // Reset from .card-inner
+  // height: 100vh !important; // Ensure full viewport height
+  // width: 100% !important; // Ensure full width
+  // z-index: 1;
   /* For z-index stacking if needed */
   //display: flex;
   //justify-content: center;

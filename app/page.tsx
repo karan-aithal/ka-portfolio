@@ -39,15 +39,19 @@ const Home = () => {
             </div>
             <div className="card" id="card2">
               <div className="card-inner">
-                {/* <Portfolio /> */}
-                {/* <div style={{ inset: 0, zIndex: 1 }}>
-                <SynthWaveShader />
-              </div> */}
-
+                <CanvasLoad />
               </div>
             </div>
-
-            <CanvasLoad />
+            <div className="card" id="card3">
+              <div className="card-inner">
+                <Grid />
+              </div>
+            </div>
+            <div className="card" id="card4">
+              <div className="card-inner">
+                <RecentProjects />
+              </div>
+            </div>
           </div>
           <StickyCardsAnimation />
 
@@ -55,8 +59,8 @@ const Home = () => {
           {/* <>Canvas </> // canvas for animation entry for character same background as tron or matrix  */}
 
           {/* logo is visible when disabling Hero  */}
-          <Grid />
-          <RecentProjects />
+          {/* <Grid /> */}
+          {/* <RecentProjects /> */}
           <Clients />
           <Experience />
           <Approach />

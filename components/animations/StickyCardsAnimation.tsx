@@ -12,6 +12,9 @@ export default function StickyCardsAnimation() {
         const cards = gsap.utils.toArray<HTMLElement>('.sticky-cards .card');
 
         cards.forEach((card, index) => {
+            if (card.id === 'card2') return;
+            if (index > cards.findIndex(c => c.id === "card2")) return;
+
             if (index === cards.length - 1) return;
 
             const cardInner = card.querySelector('.card-inner');
@@ -21,9 +24,12 @@ export default function StickyCardsAnimation() {
 
             const tl = gsap.timeline({
                 scrollTrigger: {
-                    trigger: nextCard,
-                    start: 'top 85%',
-                    end: 'top -75%',
+                    // trigger: nextCard,
+                    // start: 'top 85%',
+                    // end: 'top -75%',
+                    trigger: card,
+                    start: 'top top',
+                    end: 'bottom top',
                     scrub: true,
                     pin: card,
                     pinSpacing: false,

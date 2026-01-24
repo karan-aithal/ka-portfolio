@@ -121,10 +121,26 @@ html {
 .card {
   position: sticky;
   width: 100%;
+  height: 100vh;
   transform-style: preserve-3d;
   // height: 100vh;
   perspective: 1200px;
+  // min-height: 4000px;
+  z-index: 1;
+  /* Added to support ScrollTrigger's 4000px end distance */
+  // &.non-sticky {
+  //   // Add this for CanvasLoad's card
+  //   position: relative !important;
+  //   height: auto !important; // Or 100vh if needed
+  //   transform-style: flat !important;
+  //   perspective: none !important;
+  // }
 }
+
+// #card2 {
+//   min-height: 100vh;
+//   /* Added to support ScrollTrigger's 4000px end distance */
+// }
 
 .card-inner {
   position: relative;
