@@ -54,7 +54,12 @@ void main() {
   float battery = 1.0;
   float baseY = uv.y;
 
-  vec3 col = vec3(0.0, 0.1, 0.2);
+  // vec3 col = vec3(0.0, 0.1, 0.2);
+  // Background color, converted from #01031A
+  vec3 col = vec3(1.0/255.0, 3.0/255.0, 26.0/255.0);
+  // This is the base background color for the sky.
+
+
 
   float fogTightness = mix(1.4, 0.6, uScroll);
   float fog = smoothstep(0.1, -0.02, abs(uv.y) * fogTightness);
@@ -88,12 +93,19 @@ void main() {
     );
 
     float pulse = 1.0 + sin(uTime * 0.6) * 0.05;
-    col = mix(vec3(0.0), sunCol, sun(sunUV, battery) * pulse);
+    // col = mix(vec3(0.0), sunCol, sun(sunUV, battery) * pulse);
+    // Mix sun over the background color, instead of over black,
+    // to make the background color visible in the sky.
+    col = mix(col, sunCol, sun(sunUV, battery) * pulse);
+
   }
 
   col += fog * fog * fog;
-  col = mix(vec3(col.r) * 0.5, col, battery * 0.7);
-
+  // col = mix(vec3(col.r) * 0.5, col, battery * 0.7);
+  // This line was applying a color grading effect that desaturated and
+  // darkened the final color, making your background appear almost black.
+  // I've commented it out to ensure the background color is displayed correctly.
+  
   gl_FragColor = vec4(col, 1.0);
 }
 `;
