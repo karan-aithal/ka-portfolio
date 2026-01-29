@@ -159,11 +159,12 @@ export const ModelAnimNLE: React.FC<ModelAnimNLEProps> = ({
 
     // Configure ScrollTrigger: 4000px scroll distance to complete animation
     const st = ScrollTrigger.create({
-      trigger: ".Loader-container",
+      trigger: "#card2",
       start: "top top", // Pin when section reaches viewport top
-      end: "+=4000", // Unpin after 4000px of scroll
-      scrub: 5, // Smooth delay (higher = more lag)
+      end: "+=5000", // Unpin after 4000px of scroll
+      scrub: 13, // Smooth delay (higher = more lag)
       pin: true, // Keep section fixed during animation
+      pinSpacing: true,
       markers: true, // Debug markers (remove in production)
 
       onUpdate: (self) => {

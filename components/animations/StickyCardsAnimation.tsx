@@ -13,6 +13,9 @@ export default function StickyCardsAnimation() {
 
         cards.forEach((card, index) => {
             if (index === cards.length - 1) return;
+            // ignore card2 for pinning to scroll through animation
+            if (card.id === 'card2') return;
+            if (index > cards.findIndex(c => c.id === "card2")) return;
 
             const cardInner = card.querySelector('.card-inner');
             const nextCard = cards[index + 1];
