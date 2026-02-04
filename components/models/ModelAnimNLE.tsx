@@ -31,15 +31,19 @@ interface ModelAnimNLEProps {
   nlaData: NLATrack[];
   blenderFPS: number;
   onScrollProgress?: (progress: number) => void;
+  onCameraZoomProgress?: (progress: number) => void;
+  onCanvasOpacity?: (opacity: number) => void;
 }
 
 /**
- * ModelAnimNLE - Scroll-controlled 3D model animation
+ * ModelAnimNLE - Scroll-controlled 3D model animation with heart zoom transition
  * 
- * Controls model animation based on scroll position using GSAP ScrollTrigger.
- * - Scroll down: Play animation forward (frames 3→250)
- * - Scroll up: Reverse animation
- * - Scroll past: Auto-loop last 60 frames (190→250)
+ * Multi-phase scroll control:
+ * - Phase 1 (0-64%): Model animation (frames 3→250)
+ * - Phase 2 (64-90%): Camera zoom to Spine2 bone (heart)
+ * - Phase 3 (90-100%): Canvas fade out, card3 reveal
+ * 
+ * Total scroll distance: ~7800px
  */
 export const ModelAnimNLE: React.FC<ModelAnimNLEProps> = ({
   actions,
@@ -47,6 +51,8 @@ export const ModelAnimNLE: React.FC<ModelAnimNLEProps> = ({
   nlaData,
   blenderFPS,
   onScrollProgress,
+  onCameraZoomProgress,
+  onCanvasOpacity,
 }) => {
   const actionRef = useRef<AnimationAction | null>(null);
   const animFrameRef = useRef<number | null>(null);
@@ -157,11 +163,11 @@ export const ModelAnimNLE: React.FC<ModelAnimNLEProps> = ({
 
     console.log("🎬 Animation ready for scroll control");
 
-    // Configure ScrollTrigger: 4000px scroll distance to complete animation
+    // Configure ScrollTrigger: Extended to ~7800px for 3-phase transition
     const st = ScrollTrigger.create({
       trigger: "#card2",
       start: "top top", // Pin when section reaches viewport top
-      end: "+=5000", // Unpin after 4000px of scroll
+      end: "+=7800", // Extended: 5000 (anim) + 2000 (zoom) + 800 (fade)
       scrub: 13, // Smooth delay (higher = more lag)
       pin: true, // Keep section fixed during animation
       pinSpacing: true,
@@ -169,19 +175,58 @@ export const ModelAnimNLE: React.FC<ModelAnimNLEProps> = ({
 
       onUpdate: (self) => {
         scrollProgress.current = self.progress;
+        const progress = self.progress;
 
-        // Notify parent of scroll progress
+        // Notify parent of overall scroll progress
         if (onScrollProgress) {
-          onScrollProgress(self.progress);
+          onScrollProgress(progress);
         }
 
-        // Only update if not looping
-        if (!isLooping.current) {
-          updateAnimationFromScroll(self.progress);
-        }
+        // Phase 1: Animation (0-64% of total scroll → 5000/7800)
+        if (progress <= 0.641) {
+          const animProgress = progress / 0.641;
 
-        if (self.progress < 1) {
-          console.log(`📊 Scroll: ${(self.progress * 100).toFixed(1)}%`);
+          // Only update animation if not looping
+          if (!isLooping.current) {
+            updateAnimationFromScroll(animProgress);
+          }
+
+          // Reset camera zoom and canvas opacity
+          if (onCameraZoomProgress) onCameraZoomProgress(0);
+          if (onCanvasOpacity) onCanvasOpacity(1);
+
+          console.log(`🎬 Animation: ${(animProgress * 100).toFixed(1)}%`);
+        }
+        // Phase 2: Camera Zoom (64-90% → 2000px zoom to heart)
+        else if (progress <= 0.897) {
+          const zoomProgress = (progress - 0.641) / (0.897 - 0.641);
+
+          // Hold animation at final frame
+          if (!isLooping.current) {
+            updateAnimationFromScroll(1);
+          }
+
+          // Update camera zoom
+          if (onCameraZoomProgress) onCameraZoomProgress(zoomProgress);
+          if (onCanvasOpacity) onCanvasOpacity(1);
+
+          console.log(`📷 Heart zoom: ${(zoomProgress * 100).toFixed(1)}%`);
+        }
+        // Phase 3: Canvas Fade (90-100% → 800px fade out)
+        else {
+          const fadeProgress = (progress - 0.897) / (1 - 0.897);
+
+          // Hold animation and zoom at final state
+          if (!isLooping.current) {
+            updateAnimationFromScroll(1);
+          }
+          if (onCameraZoomProgress) onCameraZoomProgress(1);
+
+          // Fade canvas out
+          const opacity = 1 - fadeProgress;
+          if (onCanvasOpacity) onCanvasOpacity(opacity);
+
+          console.log(`🌫️ Canvas fade: ${(fadeProgress * 100).toFixed(1)}% (opacity: ${opacity.toFixed(2)})`);
         }
       },
 

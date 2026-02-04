@@ -1,11 +1,12 @@
 import React, { useRef, useEffect } from "react";
 import { useGLTF, useAnimations } from "@react-three/drei";
 import { Group } from "three";
-// import from "../../public/assets/AnimntitledCopy.glb";
+import * as THREE from "three";
 
 type ModelProps = {
   url: string;
   onAnimationsLoaded?: (clips: any, mixer: any) => void;
+  onBoneFound?: (bone: THREE.Bone) => void;
   onPointerOver?: (event: any) => void;
   onPointerOut?: (event: any) => void;
 };
@@ -13,6 +14,7 @@ type ModelProps = {
 export const Model: React.FC<ModelProps> = ({
   url,
   onAnimationsLoaded,
+  onBoneFound,
   onPointerOver,
   onPointerOut,
 }) => {
@@ -30,6 +32,19 @@ export const Model: React.FC<ModelProps> = ({
       animations.map((clip: any) => clip.name)
     );
   }, []);
+
+  // Find Spine2 bone for heart zoom
+  useEffect(() => {
+    if (!scene || !onBoneFound) return;
+
+    scene.traverse((child: any) => {
+      if (child.type === "Bone" && child.name === "Spine2") {
+        console.log("🫀 Found Spine2 bone:", child);
+        onBoneFound(child as THREE.Bone);
+      }
+    });
+  }, [scene, onBoneFound]);
+
   // actions, mixer, onAnimationsLoaded;
   return (
     <primitive
@@ -42,4 +57,4 @@ export const Model: React.FC<ModelProps> = ({
   );
 };
 
-useGLTF.preload("../../public/assets/AnimnSingleBake.glb"); // optional preloading
+useGLTF.preload("../../public/assets/ModelAnimSingleBakewHeartblend.glb"); // optional preloading

@@ -152,6 +152,12 @@ html {
   z-index: 2;
 }
 
+// Heart zoom transition: canvas fade
+.Loader-container {
+  transition: opacity 0.05s linear; // Smooth for scroll-scrubbing
+  will-change: opacity;
+}
+
 
 
 

@@ -8,12 +8,13 @@ import {
 } from "@react-three/drei";
 import gsap from "gsap";
 import * as THREE from "three";
-import { AnimationAction, Group } from "three";
+import { AnimationAction, Group, Bone } from "three";
 import SynthWaveShader from "@/components/3D/shaders/SynthWaveShader";
 import { FixedOverlay } from "@/lib/FixedOverlayPortal";
 
 import { Model } from "./../models/Model";
 import { ModelAnimNLE } from "./../models/ModelAnimNLE";
+import { CameraController } from "./../models/CameraController";
 import "@/scss/layouts/_canvasload.scss";
 import nlaData from "../../public/assets/nla_export3.json"; // <-- your exported NLA strips
 const nlaJSON = [...nlaData];
@@ -41,7 +42,7 @@ function FixedCamera() {
 
 
 export const CanvasLoad: React.FC<CanvasLoadProps> = ({
-  modelUrl = "/assets/AnimnSingleBake.glb",
+  modelUrl = "/assets/ModelAnimSingleBakewHeartblend.glb",
 }) => {
   const [hovered, setHovered] = useState(false);
   const [actions, setActions] = useState<{
@@ -52,6 +53,11 @@ export const CanvasLoad: React.FC<CanvasLoadProps> = ({
   const [isFixed, setIsFixed] = useState(false);
   const [shaderDone, setShaderDone] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
+
+  // Heart zoom states
+  const [spine2Bone, setSpine2Bone] = useState<Bone | null>(null);
+  const [cameraZoomProgress, setCameraZoomProgress] = useState(0);
+  const [canvasOpacity, setCanvasOpacity] = useState(1);
 
   // Disabled: ScrollTrigger handles pinning now
   // useStickWhenTopReached(containerRef, setIsFixed);
@@ -71,6 +77,7 @@ export const CanvasLoad: React.FC<CanvasLoadProps> = ({
             onAnimationsLoaded={(actions, mixer) =>
               setActions({ actions, mixer })
             }
+            onBoneFound={setSpine2Bone}
             onPointerOver={() => setHovered(true)}
             onPointerOut={() => setHovered(false)}
           />
@@ -81,8 +88,14 @@ export const CanvasLoad: React.FC<CanvasLoadProps> = ({
               nlaData={nlaJSON}
               blenderFPS={24}
               onScrollProgress={setScrollProgress}
+              onCameraZoomProgress={setCameraZoomProgress}
+              onCanvasOpacity={setCanvasOpacity}
             />
           )}
+          <CameraController
+            targetBone={spine2Bone}
+            zoomProgress={cameraZoomProgress}
+          />
           <Environment preset="sunset" />
         </Suspense>
         <OrbitControls
@@ -102,7 +115,11 @@ export const CanvasLoad: React.FC<CanvasLoadProps> = ({
   );
 
   return (
-    <div ref={containerRef} className="Loader-container">
+    <div
+      ref={containerRef}
+      className="Loader-container"
+      style={{ opacity: canvasOpacity }}
+    >
       {CanvasStack}
     </div>
   );
