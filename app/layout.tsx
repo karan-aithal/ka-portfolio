@@ -7,7 +7,7 @@ import { ThemeProvider } from "./provider";
 import ScrollManager from "@/components/animations/ScrollManager";
 
 const inter = Inter({ subsets: ["latin"] });
-
+// { inter.className }
 export const metadata: Metadata = {
   title: "Karan's Portfolio",
   description: "Next js portfolio",
@@ -24,7 +24,7 @@ export default function RootLayout({
         <link rel="icon" href="/jsm-logo.png" sizes="any" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
-      <body className={inter.className}>
+      <body className="Body">
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"

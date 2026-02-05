@@ -1,0 +1,145 @@
+.matrix-wrapper {
+    // Block element appearing naturally in document flow after sticky-cards
+    // display: block;
+    position: relative;
+    top: 0;
+    left: 50%;
+    width: 125%;
+
+    height: 100vh;
+    transform: translateX(-50%);
+
+    // background-color: rgb(30, 144, 255);
+    background-color: #01031A;
+    /* dodger blue */
+    overflow: hidden;
+    font-family: 'Matrix Code NFI';
+    z-index: -1;
+    pointer-events: none;
+
+    canvas.matrix-canvas {
+        position: absolute;
+        width: 100%;
+        height: 100vh;
+        display: block;
+        z-index: -1;
+    }
+}
+
+// .matrix-wrapper {
+//     // @font-face {
+//     //     font-family: 'Matrix Code NFI';
+//     //     // font-style: normal;
+//     //     // font-weight: normal;
+//     //     src: local('Matrix Code NFI'), url('/public/fonts/matrix_code_nfi.woff') format('woff');
+//     // }
+
+//     //position: fixed;
+//     top: 0;
+//     left: 0;
+//     width: 100vw;
+//     height: 100vh;
+//     overflow: hidden;
+
+//     .matrix-canvas {
+//         display: block;
+//         width: 100%;
+//         height: 100%;
+//     }
+
+//     .matrix-quotation {
+//         position: absolute;
+//         top: 50%;
+//         left: 50%;
+//         transform: translate(-50%, -50%);
+//         max-width: 65rem;
+//         padding: 0 1.5em;
+//         margin: 0 auto;
+//         text-align: center;
+//         color: #eee;
+//         font-size: 1.25rem;
+//         line-height: 1.5em;
+//         z-index: 3150;
+//         mix-blend-mode: hard-light;
+//         background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.1));
+//         padding: 2em;
+//         border-radius: 0.5em;
+//         animation: fadeInOut 4s ease-in-out;
+
+//         p {
+//             margin: 0;
+//             font-family: "Lucida Console", Monaco, monospace, "Courier New", Courier;
+//         }
+//     }
+
+//     .matrix-controls {
+//         position: absolute;
+//         bottom: 1.5em;
+//         right: 1.5em;
+//         z-index: 5000;
+//         display: flex;
+//         gap: 0.5em;
+//         align-items: center;
+//         flex-wrap: wrap;
+//         justify-content: flex-end;
+
+//         button {
+//             font-size: 1.5rem;
+//             font-weight: 700;
+//             display: inline-block;
+//             background: #333;
+//             color: #eee;
+//             border: 2px solid transparent;
+//             border-radius: 0.125em;
+//             width: 2.125em;
+//             height: 2.125em;
+//             line-height: 2.125em;
+//             text-align: center;
+//             cursor: pointer;
+//             transition: all 0.2s ease;
+
+//             &:hover {
+//                 background: #555;
+//             }
+//         }
+//     }
+
+//     .matrix-colors {
+//         display: flex;
+//         gap: 0.25em;
+//         flex-wrap: wrap;
+//         justify-content: flex-end;
+//         max-width: 20rem;
+
+//         .color-button {
+//             width: 1.5em;
+//             height: 1.5em;
+//             font-size: 1rem;
+//             padding: 0 !important;
+//             border-radius: 50%;
+//             transition: all 0.2s ease;
+
+//             &:hover {
+//                 transform: scale(1.1);
+//             }
+//         }
+//     }
+// }
+
+// @keyframes fadeInOut {
+//     0% {
+//         opacity: 0;
+//     }
+
+//     10% {
+//         opacity: 1;
+//     }
+
+//     90% {
+//         opacity: 1;
+//     }
+
+//     100% {
+//         opacity: 0;
+//     }
+// }

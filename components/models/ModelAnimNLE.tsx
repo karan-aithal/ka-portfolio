@@ -167,11 +167,11 @@ export const ModelAnimNLE: React.FC<ModelAnimNLEProps> = ({
     const st = ScrollTrigger.create({
       trigger: "#card2",
       start: "top top", // Pin when section reaches viewport top
-      end: "+=7800", // Extended: 5000 (anim) + 2000 (zoom) + 800 (fade)
+      end: "+=600%", // Extended: 5000 (anim) + 2000 (zoom) + 800 (fade)
       scrub: 13, // Smooth delay (higher = more lag)
       pin: true, // Keep section fixed during animation
-      pinSpacing: true,
-      markers: true, // Debug markers (remove in production)
+      pinSpacing: false,
+      markers: false, // Debug markers (remove in production)
 
       onUpdate: (self) => {
         scrollProgress.current = self.progress;
@@ -182,9 +182,10 @@ export const ModelAnimNLE: React.FC<ModelAnimNLEProps> = ({
           onScrollProgress(progress);
         }
 
-        // Phase 1: Animation (0-64% of total scroll → 5000/7800)
-        if (progress <= 0.641) {
-          const animProgress = progress / 0.641;
+
+        // Phase 1: Animation (0-58.3% of total scroll -> 350vh / 600vh)
+        if (progress <= 0.583) {
+          const animProgress = progress / 0.583;
 
           // Only update animation if not looping
           if (!isLooping.current) {
@@ -197,9 +198,9 @@ export const ModelAnimNLE: React.FC<ModelAnimNLEProps> = ({
 
           console.log(`🎬 Animation: ${(animProgress * 100).toFixed(1)}%`);
         }
-        // Phase 2: Camera Zoom (64-90% → 2000px zoom to heart)
-        else if (progress <= 0.897) {
-          const zoomProgress = (progress - 0.641) / (0.897 - 0.641);
+        // Phase 2: Camera Zoom (58.3-83.3% -> 150vh / 600vh)
+        else if (progress <= 0.80) {
+          const zoomProgress = (progress - 0.583) / (0.80 - 0.583);
 
           // Hold animation at final frame
           if (!isLooping.current) {
@@ -212,9 +213,9 @@ export const ModelAnimNLE: React.FC<ModelAnimNLEProps> = ({
 
           console.log(`📷 Heart zoom: ${(zoomProgress * 100).toFixed(1)}%`);
         }
-        // Phase 3: Canvas Fade (90-100% → 800px fade out)
+        // Phase 3: Canvas Fade (83.3-100% -> 100vh / 600vh)
         else {
-          const fadeProgress = (progress - 0.897) / (1 - 0.897);
+          const fadeProgress = (progress - 0.80) / (1 - 0.80);
 
           // Hold animation and zoom at final state
           if (!isLooping.current) {
@@ -223,7 +224,7 @@ export const ModelAnimNLE: React.FC<ModelAnimNLEProps> = ({
           if (onCameraZoomProgress) onCameraZoomProgress(1);
 
           // Fade canvas out
-          const opacity = 1 - fadeProgress;
+          const opacity = Math.pow(1 - fadeProgress, 3);
           if (onCanvasOpacity) onCanvasOpacity(opacity);
 
           console.log(`🌫️ Canvas fade: ${(fadeProgress * 100).toFixed(1)}% (opacity: ${opacity.toFixed(2)})`);

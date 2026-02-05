@@ -49,6 +49,22 @@ export default function StickyCardsAnimation() {
             );
         });
 
+        const card3 = cards.find(c => c.id === 'card3');
+        if (card3) {
+            // This trigger pins card3 while card2 fades out on top of it.
+            // The start trigger is card3 reaching the top of the viewport.
+            // The duration must match the fade-out duration of card2's animation.
+            // card2's animation is 600vh total. The fade is the last 20% (from 80% to 100%).
+            // Fade duration = 0.20 * 600vh = 120vh.
+            ScrollTrigger.create({
+                trigger: card3,
+                start: 'top top',
+                end: '+=120%', // Pin for 120% of viewport height
+                pin: true,
+                pinSpacing: true, // Add space so card4 flows correctly after
+            });
+        }
+
         ScrollTrigger.refresh();
 
         return () => {

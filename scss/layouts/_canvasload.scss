@@ -42,28 +42,28 @@
     z-index: 1;
   }
 
-  .starfield-container {
-    position: absolute;
-    inset: 0;
-    top: -7%; // portfolio has bottom -- 8% to match it we have -7% top
-    left: 50%;
-    /* center the starfield */
-    width: 125%;
-    /* wider than loader-container for full coverage */
-    height: 100vh;
-    transform: translateX(-50%);
-    /* center horizontally */
-    background: rgb(10, 10, 10);
-    overflow: visible;
-    z-index: 0;
-  }
+  // .starfield-container {
+  //   position: absolute;
+  //   inset: 0;
+  //   top: -7%; // portfolio has bottom -- 8% to match it we have -7% top
+  //   left: 50%;
+  //   /* center the starfield */
+  //   width: 125%;
+  //   /* wider than loader-container for full coverage */
+  //   height: 100vh;
+  //   transform: translateX(-50%);
+  //   /* center horizontally */
+  //   background: rgb(10, 10, 10);
+  //   overflow: visible;
+  //   z-index: 0;
+  // }
 
-  .starfield-canvas {
-    display: block;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-  }
+  // .starfield-canvas {
+  //   display: block;
+  //   width: 100%;
+  //   height: 100%;
+  //   z-index: 1;
+  // }
 
   canvas {
     //top: 8%;
